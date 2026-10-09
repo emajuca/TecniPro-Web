@@ -1,74 +1,141 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TecniPro a tu Casa</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://kit.fontawesome.com/3e68cf0269.js" crossorigin="anonymous"></script>
+    <title>TecniPro | Servicio Técnico a Domicilio</title>
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
-    <header>
-        <div class="navbar">
-            <div class="logo">
-                <img src="./assets/img/logo-navbar.png" alt="Logo de TecniPro a tu Casa">
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="#inicio">Inicio</a></li>
-                    <li><a href="#servicios">Servicios</a></li>
-                    <li><a href="#por-que-elegirnos">¿Por qué elegirnos?</a></li>
-                    <li><a href="#contacto">Contacto</a></li>
-                </ul>
-            </nav>
+    <header class="header">
+        <div class="logo">
+            <a href="#inicio"><img src="./assets/img/logo-navbar.png" alt="Logo TecniPro" class="logo-img"></a>
         </div>
+        <nav class="nav-menu">
+            <a href="#servicios">Servicios</a>
+            <a href="#beneficios">¿Por qué nosotros?</a>
+            <a href="#preguntas">Preguntas Frecuentes</a>
+            <a href="#contacto">Contacto</a>
+        </nav>
+        <a href="#" class="btn-primary">Iniciar Sesión</a>
     </header>
+
     <main>
-        <section class="hero" id="inicio">
-            <div class="hero-content">
-                <h1>Servicio Técnico a Domicilio para PC, Celulares y Consolas.</h1>
-                <p>Ofrecemos servicios de reparación y mantenimiento a domicilio para tus dispositivos electrónicos.</p>
-                <a href="#contacto" class="btn">Solicitar Diagnóstico</a>
-                <a href="#servicios" class="btn">Ver Servicios</a>
+        <section id="inicio" class="hero">
+            <div class="hero-text">
+                <h1>Soluciones Técnicas a Domicilio para PC, Celulares y Consolas</h1>
+                <p>Ahorra tiempo. Eliminamos la molestia de desplazarte. Mantenimiento, reparación y optimización
+                    directamente en tu casa u oficina.</p>
+                <div class="hero-buttons">
+                    <a href="#contacto" class="btn-primary">Solicitar Diagnóstico</a>
+                    <a href="#servicios" class="btn-secondary">Ver Servicios</a>
+                </div>
             </div>
             <div class="hero-image">
-                <img src="./assets/img/hero-image.png" alt="Imagen de servicio técnico a domicilio">
-            </div>
-        </section>
-        <section class="services" id="servicios">
-            <div class="services-header">
-                <h2>Nuestros Servicios</h2>
-                <p>Ofrecemos una amplia gama de servicios técnicos para satisfacer todas tus necesidades de la mejor
-                    manera posible.</p>
-            </div>
-            <div class="services-list">
-                <article class="card-service">
-                    <i class="fas fa-laptop-code"></i>
-                    <h3>Reparación de PC</h3>
-                    <p>Diagnóstico y reparación de hardware y software para computadoras de escritorio y portátiles.</p>
-                </article>
-                <article class="card-service">
-                    <i class="fas fa-mobile-alt"></i>
-                    <h3>Reparación de Celulares</h3>
-                    <p>Reparación de pantallas, baterías, cámaras y otros componentes de teléfonos móviles.</p>
-                </article>
-                <article class="card-service">
-                    <i class="fas fa-gamepad"></i>
-                    <h3>Reparación de Consolas</h3>
-                    <p>Servicio técnico para consolas de videojuegos, incluyendo limpieza, reparación y mantenimiento.
-                    </p>
-                </article>
-                <div class="services-footer">
-                    <a href="#more-info" class="btn">Mas Información</a>
-                    <a href="#contacto" class="btn">Solicitar Diagnóstico</a>
+                <div class="image-container">
+                    <img src="./assets/img/hero.png" alt="Imagen de Servicio Técnico a Domicilio">
                 </div>
             </div>
         </section>
+
+        <section id="servicios" class="services">
+            <div class="container">
+                <h2>Nuestros Servicios Especializados</h2>
+                <p>Soporte rápido para las principales marcas y dispositivos tecnológicos.</p>
+
+                <div class="services-grid">
+                    <article class="service-card">
+                        <div class="card-icon">
+                            <i class="fa-solid fa-mobile-screen-button"></i>
+                        </div>
+                        <h3>Reparación de Celulares</h3>
+                        <p>Cambio de pantallas, baterías, puerto de carga y diagnóstico exprés para Apple, Samsung,
+                            Xiaomi y más.</p>
+                        <a href="#contacto" class="card-btn">Cotizar</a>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="card-icon">
+                            <i class="fa-solid fa-laptop-code"></i>
+                        </div>
+                        <h3>Computadores y Laptops</h3>
+                        <p>Mantenimiento preventivo, formateo, eliminación de virus y repuestos para Multi-marca.</p>
+                        <a href="#contacto" class="card-btn">Cotizar</a>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="card-icon">
+                            <i class="fa-solid fa-gamepad"></i>
+                        </div>
+                        <h3>Consolas y PC Gamer</h3>
+                        <p>Optimización de FPS, mantenimiento térmico y reparación de controles para PlayStation, Xbox y
+                            PC.</p>
+                        <a href="#contacto" class="card-btn">Cotizar</a>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="beneficios" class="benefits">
+            <h2>¿Por qué elegir TecniPro?</h2>
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <i class="fa-solid fa-house-laptop benefit-icon"></i>
+                    <h4>Comodidad Total</h4>
+                    <p>Atendemos directamente en la comodidad de tu hogar o lugar de trabajo.</p>
+                </div>
+                <div class="benefit-item">
+                    <i class="fa-solid fa-clock benefit-icon"></i>
+                    <h4>Respuesta Rápida</h4>
+                    <p>Diagnósticos y reparación en tiempo récord para que no detengas tus labores.</p>
+                </div>
+                <div class="benefit-item">
+                    <i class="fa-solid fa-shield-halved benefit-icon"></i>
+                    <h4>Garantía y Confianza</h4>
+                    <p>Repuestos probados, garantía por servicio y trato directo personalizado.</p>
+                </div>
+            </div>
+        </section>
+        <section id="preguntas" class="faq">
+            <h2>Preguntas Frecuentes</h2>
+            <div class="faq-item">
+                <h4>¿Qué marcas de dispositivos reparan?</h4>
+                <p>Reparamos una amplia gama de marcas, incluyendo Apple, Samsung, Xiaomi, HP, Dell, PlayStation y Xbox.
+                </p>
+            </div>
+            <div class="faq-item">
+                <h4>¿Cuánto tiempo tarda un diagnóstico?</h4>
+                <p>El diagnóstico inicial se realiza en menos de 24 horas. La reparación depende del tipo de servicio
+                    requerido.</p>
+            </div>
+            <div class="faq-item">
+                <h4>¿Ofrecen garantía por sus servicios?</h4>
+                <p>Sí, todos nuestros servicios incluyen garantía por defectos de reparación y repuestos utilizados.</p>
+            </div>
+        </section>
+        <section id="contacto" class="contact">
+            <h2>Contáctanos</h2>
+            <p>¿Listo para recibir asistencia técnica a domicilio? Completa el formulario y nos pondremos en contacto
+                contigo.</p>
+            <form id="contactForm">
+                <input type="text" name="nombre" placeholder="Nombre" required>
+                <input type="email" name="email" placeholder="Correo Electrónico" required>
+                <input type="tel" name="telefono" placeholder="Teléfono" required>
+                <textarea name="mensaje" placeholder="Mensaje" required></textarea>
+                <button type="submit" class="btn-primary">Enviar</button>
+            </form>
+        </section>
     </main>
 
+    <footer>
+        <p>&copy; 2026 TecniPro. Todos los derechos reservados.</p>
+    </footer>
 
+    <script src="./script.js"></script>
 </body>
 
 </html>
