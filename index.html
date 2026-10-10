@@ -21,15 +21,14 @@
             <a href="#preguntas">Preguntas Frecuentes</a>
             <a href="#contacto">Contacto</a>
         </nav>
-        <a href="#" class="btn-primary">Iniciar Sesión</a>
+        <button id="openLoginBtn" class="btn-primary">Iniciar Sesión</button>
     </header>
 
     <main>
         <section id="inicio" class="hero">
             <div class="hero-text">
                 <h1>Soluciones Técnicas a Domicilio para PC, Celulares y Consolas</h1>
-                <p>Ahorra tiempo. Eliminamos la molestia de desplazarte. Mantenimiento, reparación y optimización
-                    directamente en tu casa u oficina.</p>
+                <p>Ahorra tiempo. Eliminamos la molestia de desplazarte. Mantenimiento, reparación y optimización directamente en tu casa u oficina.</p>
                 <div class="hero-buttons">
                     <a href="#contacto" class="btn-primary">Solicitar Diagnóstico</a>
                     <a href="#servicios" class="btn-secondary">Ver Servicios</a>
@@ -48,8 +47,7 @@
                             <i class="fa-solid fa-mobile-screen-button"></i>
                         </div>
                         <h3>Reparación de Celulares</h3>
-                        <p>Cambio de pantallas, baterías, puerto de carga y diagnóstico exprés para Apple, Samsung,
-                            Xiaomi y más.</p>
+                        <p>Cambio de pantallas, baterías, puerto de carga y diagnóstico exprés para Apple, Samsung, Xiaomi y más.</p>
                         <a href="#contacto" class="card-btn">Cotizar</a>
                     </article>
 
@@ -67,8 +65,7 @@
                             <i class="fa-solid fa-gamepad"></i>
                         </div>
                         <h3>Consolas y PC Gamer</h3>
-                        <p>Optimización de FPS, mantenimiento térmico y reparación de controles para PlayStation, Xbox y
-                            PC.</p>
+                        <p>Optimización de FPS, mantenimiento térmico y reparación de controles para PlayStation, Xbox y PC.</p>
                         <a href="#contacto" class="card-btn">Cotizar</a>
                     </article>
                 </div>
@@ -100,13 +97,11 @@
             <h2>Preguntas Frecuentes</h2>
             <div class="faq-item">
                 <h4>¿Qué marcas de dispositivos reparan?</h4>
-                <p>Reparamos una amplia gama de marcas, incluyendo Apple, Samsung, Xiaomi, HP, Dell, PlayStation y Xbox.
-                </p>
+                <p>Reparamos una amplia gama de marcas, incluyendo Apple, Samsung, Xiaomi, HP, Dell, PlayStation y Xbox.</p>
             </div>
             <div class="faq-item">
                 <h4>¿Cuánto tiempo tarda un diagnóstico?</h4>
-                <p>El diagnóstico inicial se realiza en menos de 24 horas. La reparación depende del tipo de servicio
-                    requerido.</p>
+                <p>El diagnóstico inicial se realiza en menos de 24 horas. La reparación depende del tipo de servicio requerido.</p>
             </div>
             <div class="faq-item">
                 <h4>¿Ofrecen garantía por sus servicios?</h4>
@@ -119,7 +114,6 @@
             <p>Accede a tu cuenta registrada o completa el formulario para solicitar asistencia.</p>
 
             <div class="contact-login">
-                <!-- Formulario con columnas y Habeas Data -->
                 <div class="card-box">
                     <h3>Formulario de Contacto</h3>
                     <form id="contactForm">
@@ -136,16 +130,13 @@
                                 <option value="consolas">Consolas / PC Gamer</option>
                             </select>
                         </div>
-                        <textarea name="mensaje" placeholder="Describe brevemente el problema o requerimiento..."
-                            required></textarea>
+                        <textarea name="mensaje" placeholder="Describe brevemente el problema o requerimiento..." required></textarea>
 
-                        <!-- Casilla de Tratamiento de Datos Obligatoria -->
                         <div class="data-checkbox-container">
                             <label class="checkbox-label">
                                 <input type="checkbox" id="acepto-datos" required>
                                 <span class="checkbox-text">
-                                    Autorizo el <a href="#" target="_blank">tratamiento de datos personales</a> según la
-                                    Ley 1581 de 2012.
+                                    Autorizo el <a href="#" target="_blank">tratamiento de datos personales</a> según la Ley 1581 de 2012.
                                 </span>
                             </label>
                         </div>
@@ -161,8 +152,7 @@
                 <div class="card-box">
                     <h3>¿Ya tienes cuenta?</h3>
                     <p class="login-prompt-text">Accede al portal para revisar el estado técnico de tus equipos.</p>
-                    <a href="#" class="btn-primary"
-                        style="display: block; text-align: center; margin-top: 20px;">Iniciar Sesión</a>
+                    <button id="openLoginBtn2" class="btn-primary" style="display: block; width: 100%; margin-top: 20px;">Iniciar Sesión</button>
                 </div>
             </div>
         </section>
@@ -175,13 +165,11 @@
                     <img src="./assets/img/logo-navbar.png" alt="Logo TecniPro" class="logo-img">
                 </div>
                 <p class="footer-text">
-                    Servicios especializados de mantenimiento, reparación y optimización técnica a domicilio para
-                    computadores, celulares y consolas.
+                    Servicios especializados de mantenimiento, reparación y optimización técnica a domicilio para computadores, celulares y consolas.
                 </p>
                 <p class="data-notice">
                     <i class="fa-solid fa-shield-halved"></i>
-                    <strong>Protección de Datos:</strong> Al enviar tus datos, autorizas a TecniPro su tratamiento
-                    exclusivo para gestión de solicitudes y atención al cliente (Ley 1581 de 2012).
+                    <strong>Protección de Datos:</strong> Al enviar tus datos, autorizas a TecniPro su tratamiento exclusivo para gestión de solicitudes y atención al cliente (Ley 1581 de 2012).
                 </p>
             </div>
 
@@ -213,12 +201,39 @@
         </div>
     </footer>
 
+    <!-- Botón flotante de WhatsApp -->
     <a href="https://wa.me/573138178896?text=Hola,%20necesito%20soporte%20técnico%20a%20domicilio%20para%20mi%20dispositivo."
         class="whatsapp-float" target="_blank" aria-label="Chat de WhatsApp">
         <i class="fa-brands fa-whatsapp"></i>
     </a>
 
-    <script src="./script.js"></script>
+    <!-- Modal de Inicio de Sesión -->
+    <div id="loginModal" class="modal-overlay">
+        <div class="modal-content card-box">
+            <button id="closeLoginModal" class="close-modal-btn" aria-label="Cerrar modal">&times;</button>
+            <h3>Iniciar Sesión</h3>
+            <p class="modal-subtitle">Ingresa a tu cuenta de TecniPro</p>
+
+            <form id="modalLoginForm">
+                <div class="form-group">
+                    <label for="login-email">Correo Electrónico</label>
+                    <input type="email" id="login-email" placeholder="ejemplo@correo.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Contraseña</label>
+                    <input type="password" id="login-password" placeholder="••••••••" required>
+                </div>
+
+                <div class="form-extra">
+                    <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+                </div>
+
+                <button type="submit" class="btn-primary">Ingresar</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="./scripts.js"></script>
 </body>
 
 </html>
