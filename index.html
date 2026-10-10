@@ -76,7 +76,7 @@
         </section>
 
         <section id="beneficios" class="benefits">
-            <h2>¿Por qué elegir TecniPro?</h2>
+            <h2>¿Por qué elegir Servitecnic?</h2>
             <div class="benefits-grid">
                 <div class="benefit-item">
                     <i class="fa-solid fa-house-laptop benefit-icon"></i>
@@ -95,17 +95,16 @@
                 </div>
             </div>
         </section>
+
         <section id="preguntas" class="faq">
             <h2>Preguntas Frecuentes</h2>
             <div class="faq-item">
                 <h4>¿Qué marcas de dispositivos reparan?</h4>
-                <p>Reparamos una amplia gama de marcas, incluyendo Apple, Samsung, Xiaomi, HP, Dell, PlayStation y Xbox.
-                </p>
+                <p>Reparamos una amplia gama de marcas, incluyendo Apple, Samsung, Xiaomi, HP, Dell, PlayStation y Xbox.</p>
             </div>
             <div class="faq-item">
                 <h4>¿Cuánto tiempo tarda un diagnóstico?</h4>
-                <p>El diagnóstico inicial se realiza en menos de 24 horas. La reparación depende del tipo de servicio
-                    requerido.</p>
+                <p>El diagnóstico inicial se realiza en menos de 24 horas. La reparación depende del tipo de servicio requerido.</p>
             </div>
             <div class="faq-item">
                 <h4>¿Ofrecen garantía por sus servicios?</h4>
@@ -118,14 +117,36 @@
             <p>Accede a tu cuenta registrada o completa el formulario para solicitar asistencia.</p>
 
             <div class="contact-login">
+                <!-- Formulario con columnas y Habeas Data -->
                 <div class="card-box">
                     <h3>Formulario de Contacto</h3>
                     <form id="contactForm">
-                        <input type="text" name="nombre" placeholder="Nombre" required>
-                        <input type="email" name="email" placeholder="Correo Electrónico" required>
-                        <input type="tel" name="telefono" placeholder="Teléfono" required>
-                        <textarea name="mensaje" placeholder="Mensaje" required></textarea>
-                        <button type="submit" class="btn-primary">Enviar</button>
+                        <div class="form-row">
+                            <input type="text" name="nombre" placeholder="Nombre completo" required>
+                            <input type="email" name="email" placeholder="Correo electrónico" required>
+                        </div>
+                        <div class="form-row">
+                            <input type="tel" name="telefono" placeholder="Teléfono / WhatsApp" required>
+                            <select name="servicio" class="form-select" required>
+                                <option value="" disabled selected>Tipo de Dispositivo</option>
+                                <option value="computadores">Computadores / Laptops</option>
+                                <option value="celulares">Celulares / Tablets</option>
+                                <option value="consolas">Consolas / PC Gamer</option>
+                            </select>
+                        </div>
+                        <textarea name="mensaje" placeholder="Describe brevemente el problema o requerimiento..." required></textarea>
+
+                        <!-- Casilla de Tratamiento de Datos Obligatoria -->
+                        <div class="data-checkbox-container">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="acepto-datos" required>
+                                <span class="checkbox-text">
+                                    Autorizo el <a href="#" target="_blank">tratamiento de datos personales</a> según la Ley 1581 de 2012.
+                                </span>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn-primary">Enviar Solicitud</button>
                     </form>
                 </div>
 
@@ -134,15 +155,55 @@
                 </div>
 
                 <div class="card-box">
-                    <a href="#" class="btn-primary">Iniciar Sesión</a>
+                    <h3>¿Ya tienes cuenta?</h3>
+                    <p class="login-prompt-text">Accede al portal para revisar el estado técnico de tus equipos.</p>
+                    <a href="#" class="btn-primary" style="display: block; text-align: center; margin-top: 20px;">Iniciar Sesión</a>
                 </div>
             </div>
         </section>
-
     </main>
 
-    <footer>
-        <p>&copy; 2026 TecniPro. Todos los derechos reservados.</p>
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-col footer-about">
+                <div class="footer-logo">
+                    <img src="./assets/img/logo-navbar.png" alt="Logo Servitecnic" class="logo-img">
+                </div>
+                <p class="footer-text">
+                    Servicios especializados de mantenimiento, reparación y optimización técnica a domicilio para computadores, celulares y consolas.
+                </p>
+                <p class="data-notice">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <strong>Protección de Datos:</strong> Al enviar tus datos, autorizas a Servitecnic su tratamiento exclusivo para gestión de solicitudes y atención al cliente (Ley 1581 de 2012).
+                </p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Legales & Privacidad</h4>
+                <ul>
+                    <li><a href="#" id="open-privacy">Política de Privacidad</a></li>
+                    <li><a href="#" id="open-terms">Términos y Condiciones</a></li>
+                    <li><a href="#" id="open-cookies">Tratamiento de Datos</a></li>
+                    <li><a href="#">Garantía del Servicio</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Atención al Cliente</h4>
+                <p class="contact-info-item"><i class="fa-solid fa-envelope"></i> soporte@servitecnic.com</p>
+                <p class="contact-info-item"><i class="fa-solid fa-phone"></i> +57 300 000 0000</p>
+                <p class="contact-info-item"><i class="fa-solid fa-location-dot"></i> Bogotá, Colombia</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+                    <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Servitecnic. Todos los derechos reservados.</p>
+        </div>
     </footer>
 
     <script src="./script.js"></script>
