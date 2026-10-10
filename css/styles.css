@@ -5,6 +5,7 @@
     --red-glow: rgba(255, 42, 42, 0.4);
     --text-main: #ffffff;
     --text-muted: #a0a8b8;
+    --font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 html {
@@ -15,7 +16,7 @@ body {
     background-color: var(--bg-dark);
     color: var(--text-main);
     line-height: 1.6;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: var(--font-family);
 }
 
 .header {
@@ -86,40 +87,55 @@ body {
 }
 
 .hero {
+    position: relative;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 80px 8%;
-    gap: 40px;
+    padding: 100px 8%;
+    min-height: 85vh;
+    background-image: url('../assets/img/hero.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(10, 12, 16, 0.6);
+    z-index: 1;
 }
 
 .hero-text {
-    max-width: 550px;
+    position: relative;
+    z-index: 2;
+    max-width: 600px;
+    background-color: rgba(82, 0, 0, 0.2);
+    padding: 40px 35px;
+    border-radius: 14px;
+    border: 1px solid var(--red-neon);
+    box-shadow: 0 0 30px var(--red-glow);
+    backdrop-filter: blur(5px);
 }
 
-.hero h1 {
-    font-size: 2.8rem;
-    margin-bottom: 20px;
-    line-height: 1.2;
+.hero-text h1 {
+    font-size: 2.5rem;
+    margin-bottom: 18px;
+    line-height: 1.25;
 }
 
-.hero p {
+.hero-text p {
     color: var(--text-muted);
-    margin-bottom: 30px;
-    font-size: 1.1rem;
+    margin-bottom: 25px;
+    font-size: 1.05rem;
 }
 
 .hero-buttons {
     display: flex;
     gap: 15px;
-}
-
-.image-container img {
-    width: 100%;
-    max-width: 450px;
-    border-radius: 12px;
-    border: 1px solid var(--red-neon);
-    box-shadow: 0 0 30px var(--red-glow);
 }
 
 .services,
