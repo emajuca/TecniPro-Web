@@ -17,6 +17,7 @@ function mostrarToast(mensaje, tipo = 'exito') {
         setTimeout(() => toast.remove(), 300);
     }, 4000);
 }
+
 document.addEventListener('DOMContentLoaded', () => {
     const loginModal = document.getElementById('loginModal');
     const openBtn1 = document.getElementById('openLoginBtn');
@@ -25,32 +26,129 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const openModal = (e) => {
         e.preventDefault();
-        if (loginModal) {
-            loginModal.classList.add('active');
-        }
+        if (loginModal) loginModal.classList.add('active');
     };
 
     const closeModal = () => {
-        if (loginModal) {
-            loginModal.classList.remove('active');
-        }
+        if (loginModal) loginModal.classList.remove('active');
     };
+
     if (openBtn1) openBtn1.addEventListener('click', openModal);
     if (openBtn2) openBtn2.addEventListener('click', openModal);
     if (closeBtn) closeBtn.addEventListener('click', closeModal);
+
     if (loginModal) {
         loginModal.addEventListener('click', (e) => {
-            if (e.target === loginModal) {
-                closeModal();
-            }
+            if (e.target === loginModal) closeModal();
         });
     }
 });
 
-document.getElementById('modalLoginForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    window.location.href = 'dashboard.html';
+const modalLoginForm = document.getElementById('modalLoginForm');
+if (modalLoginForm) {
+    modalLoginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const emailInput = modalLoginForm.querySelector('input[type="email"]');
+        const passwordInput = modalLoginForm.querySelector('input[type="password"]');
+
+        const credentials = {
+            email: emailInput ? emailInput.value : '',
+            password: passwordInput ? passwordInput.value : ''
+        };
+
+        try {
+            const res = await fetch('http://localhost:3000/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(credentials)
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                mostrarToast(`¡Bienvenido, ${data.usuario.nombre}!`, 'exito');
+
+                // Guardar la sesión localmente
+                localStorage.setItem('usuarioTecniPro', JSON.stringify(data.usuario));
+
+                const loginModal = document.getElementById('loginModal');
+                if (loginModal) loginModal.classList.remove('active');
+
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+
+            } else {
+                mostrarToast(data.error || 'Correo o contraseña incorrectos', 'error');
+            }
+        } catch (error) {
+            console.error('Error en login:', error);
+            mostrarToast('No se pudo conectar con el servidor', 'error');
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const tabLoginBtn = document.getElementById('tabLoginBtn');
+    const tabRegisterBtn = document.getElementById('tabRegisterBtn');
+    const loginForm = document.getElementById('modalLoginForm');
+    const registerForm = document.getElementById('modalRegisterForm');
+
+    if (tabLoginBtn && tabRegisterBtn && loginForm && registerForm) {
+        tabLoginBtn.addEventListener('click', () => {
+            tabLoginBtn.classList.add('active');
+            tabRegisterBtn.classList.remove('active');
+            loginForm.style.display = 'block';
+            registerForm.style.display = 'none';
+        });
+
+        tabRegisterBtn.addEventListener('click', () => {
+            tabRegisterBtn.classList.add('active');
+            tabLoginBtn.classList.remove('active');
+            registerForm.style.display = 'block';
+            loginForm.style.display = 'none';
+        });
+    }
 });
+
+const modalRegisterForm = document.getElementById('modalRegisterForm');
+
+if (modalRegisterForm) {
+    modalRegisterForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const usuarioData = {
+            nombre: document.getElementById('reg-nombre').value,
+            email: document.getElementById('reg-email').value,
+            password: document.getElementById('reg-password').value
+        };
+
+        try {
+            const res = await fetch('http://localhost:3000/api/registro', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(usuarioData)
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                mostrarToast('¡Cuenta creada con éxito! Ahora puedes iniciar sesión.', 'exito');
+                modalRegisterForm.reset();
+
+                // Cambiar automáticamente a la pestaña de login
+                const tabLoginBtn = document.getElementById('tabLoginBtn');
+                if (tabLoginBtn) tabLoginBtn.click();
+            } else {
+                mostrarToast(data.error || 'No se pudo crear la cuenta', 'error');
+            }
+        } catch (error) {
+            console.error('Error al registrar usuario:', error);
+            mostrarToast('No se pudo conectar con el servidor', 'error');
+        }
+    });
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     const contactForm = document.getElementById('contactForm');
@@ -70,9 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const response = await fetch('http://localhost:3000/api/contacto', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(formData)
                 });
 
@@ -86,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } catch (error) {
                 console.error('Error al conectar con el servidor:', error);
-                alert(' No se pudo conectar con el servidor. Verifica que node server.js esté encendido.');
+                mostrarToast('No se pudo conectar con el servidor', 'error');
             }
         });
     }

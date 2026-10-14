@@ -585,10 +585,18 @@ body {
 
 .modal-content {
     position: relative;
-    max-width: 420px;
+    max-width: 500px;
     width: 90%;
     transform: translateY(-20px);
     transition: transform 0.3s ease;
+}
+
+.modal-content.card-box {
+    background-color: var(--bg-card);
+    padding: 35px 30px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 42, 42, 0.3);
+    box-shadow: 0 0 25px var(--red-glow);
 }
 
 .modal-overlay.active .modal-content {
@@ -616,6 +624,36 @@ body {
     color: var(--text-muted);
     font-size: 0.9rem;
     margin-bottom: 25px;
+}
+
+.auth-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 10px;
+}
+
+.tab-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    padding: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-bottom: 2px solid transparent;
+}
+
+.tab-btn.active {
+    color: #ffffff;
+    border-bottom-color: #00d2ff; /* Color principal de acento */
+}
+
+.tab-btn:hover {
+    color: #ffffff;
 }
 
 .form-group {
@@ -651,7 +689,7 @@ body {
     position: fixed;
     bottom: 25px;
     right: 25px;
-    z-index: 1000;
+    z-index: 99999 !important;
     display: flex;
     flex-direction: column;
     gap: 12px;
