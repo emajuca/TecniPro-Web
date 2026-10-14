@@ -1,16 +1,14 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-
 const app = express();
-app.use(express.json());
-app.use(cors());
-
-const MONGO_URI = 'mongodb+srv://EmajucaAdmin:Er1022982080.@tecniprocluster.idv1257.mongodb.net/tecnipro?retryWrites=true&w=majority';
+const PORT = process.env.PORT || 3000;
+const MONGO_URI = process.env.MONGO_URI;
 
 mongoose.connect(MONGO_URI)
-    .then(() => console.log('✅ Conectado exitosamente a MongoDB Atlas'))
-    .catch(err => console.error('❌ Error al conectar a MongoDB:', err));
+    .then(() => console.log('🟢 Conectado exitosamente a MongoDB Atlas'))
+    .catch(err => console.error('🔴 Error al conectar a MongoDB:', err));
 
 const serviceSchema = new mongoose.Schema({
     nombre: String,
@@ -33,7 +31,6 @@ app.post('/api/contacto', async (req, res) => {
     }
 });
 
-const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
 });

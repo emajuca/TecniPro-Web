@@ -1,0 +1,133 @@
+/* ==========================================
+   ESTILOS DEL DASHBOARD DE CLIENTE
+   ========================================== */
+.dashboard-main {
+    padding: 50px 8%;
+    min-height: 80vh;
+}
+
+.dashboard-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.dashboard-container h2 {
+    font-size: 2rem;
+    margin-bottom: 5px;
+}
+
+.dashboard-subtitle {
+    color: var(--text-muted);
+    margin-bottom: 30px;
+}
+
+.user-nav {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.welcome-user {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.active-service-card {
+    background-color: var(--bg-card);
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid var(--red-neon);
+    box-shadow: 0 0 20px var(--red-glow);
+    margin-bottom: 30px;
+}
+
+.service-header-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.status-badge {
+    background-color: rgba(255, 193, 7, 0.15);
+    color: #ffc107;
+    border: 1px solid #ffc107;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.device-issue {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 25px;
+}
+
+/* Indicadores de Progreso (Pasos) */
+.progress-tracker {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 30px 0;
+    position: relative;
+    text-align: center;
+}
+
+.progress-tracker .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    z-index: 2;
+}
+
+.progress-tracker .step i {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: var(--bg-dark);
+    border: 2px solid var(--text-muted);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.progress-tracker .step.completed i {
+    background-color: var(--red-neon);
+    border-color: var(--red-neon);
+    color: white;
+    box-shadow: 0 0 10px var(--red-glow);
+}
+
+.progress-tracker .step.completed span {
+    color: var(--text-main);
+}
+
+.progress-tracker .step.active i {
+    border-color: var(--red-neon);
+    color: var(--red-neon);
+    box-shadow: 0 0 10px var(--red-glow);
+}
+
+.progress-tracker .step.active span {
+    color: var(--red-neon);
+    font-weight: 600;
+}
+
+.service-meta {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.dashboard-actions {
+    text-align: center;
+}

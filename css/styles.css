@@ -647,6 +647,47 @@ body {
     color: var(--red-neon);
 }
 
+.toast-container {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.toast {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 300px;
+    padding: 16px 20px;
+    border-radius: 10px;
+    background: var(--bg-card);
+    color: var(--text-main);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    border-left: 5px solid #22c55e;
+    font-family: inherit;
+    font-size: 0.95rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toast-icon {
+    font-size: 1.3rem;
+}
+
+.toast-error {
+    border-left-color: #ef4444;
+}
+
 @media (max-width: 900px) {
 
     .header {
@@ -689,9 +730,10 @@ body {
         text-align: center;
         margin-left: 0;
     }
+
     .contact-login .card-box {
-    width: 100%;
-    max-width: 500px;
+        width: 100%;
+        max-width: 500px;
     }
 
     .form-row {
@@ -700,7 +742,7 @@ body {
     }
 
     .footer-container {
-    grid-template-columns: 1fr;
-    gap: 30px;
-}
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
 }
