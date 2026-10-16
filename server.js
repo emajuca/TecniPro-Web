@@ -15,19 +15,20 @@ mongoose.connect(MONGO_URI)
     .then(() => console.log('🟢 Conectado exitosamente a MongoDB Atlas'))
     .catch(err => console.error('🔴 Error al conectar a MongoDB:', err));
 
-// --- MODELO Y RUTA DE CONTACTO / SERVICIOS ---
+// --- MODELO Y RUTAS DE SERVICIOS / CONTACTO ---
 const serviceSchema = new mongoose.Schema({
     nombre: String,
     email: String,
     telefono: String,
     servicio: String,
     mensaje: String,
-    estado: { type: String, default: 'En Revisión' },
+    estado: { type: String, default: 'Recibido' }, // Recibido, Diagnóstico, En Proceso, Entregado
     fecha: { type: Date, default: Date.now }
 });
 
 const ServiceRequest = mongoose.model('ServiceRequest', serviceSchema);
 
+// Crear nueva solicitud desde el formulario público
 app.post('/api/contacto', async (req, res) => {
     try {
         const nuevaSolicitud = new ServiceRequest(req.body);
@@ -39,27 +40,42 @@ app.post('/api/contacto', async (req, res) => {
     }
 });
 
-// --- OBTENER SERVICIOS DE UN USUARIO POR EMAIL ---
+// Obtener todas las solicitudes (Para el Panel Admin)
+app.get('/api/admin/servicios', async (req, res) => {
+    try {
+        const servicios = await ServiceRequest.find().sort({ fecha: -1 });
+        res.json(servicios);
+    } catch (error) {
+        console.error('Error al obtener servicios admin:', error);
+        res.status(500).json({ error: 'Error al obtener todos los servicios' });
+    }
+});
+
+// Obtener servicios filtrados por email (Para Dashboard del cliente)
 app.get('/api/servicios/:email', async (req, res) => {
     try {
         const { email } = req.params;
         const servicios = await ServiceRequest.find({ email: email }).sort({ fecha: -1 });
         res.json(servicios);
     } catch (error) {
-        console.error('Error al obtener servicios:', error);
+        console.error('Error al obtener servicios del cliente:', error);
         res.status(500).json({ error: 'Error al obtener los servicios' });
     }
 });
 
-// --- ACTUALIZAR UN SERVICIO ---
+// Actualizar estado o detalle del servicio
 app.put('/api/servicios/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const { mensaje } = req.body;
+        const { mensaje, estado } = req.body;
+
+        const updateData = {};
+        if (mensaje !== undefined) updateData.mensaje = mensaje;
+        if (estado !== undefined) updateData.estado = estado;
 
         const servicioActualizado = await ServiceRequest.findByIdAndUpdate(
             id,
-            { mensaje },
+            updateData,
             { new: true }
         );
 
@@ -80,6 +96,7 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
+// Registro de usuario con bcryptjs
 app.post('/api/registro', async (req, res) => {
     try {
         const { nombre, email, password } = req.body;
@@ -111,6 +128,7 @@ app.post('/api/registro', async (req, res) => {
     }
 });
 
+// Login de usuario
 app.post('/api/login', async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -141,6 +159,22 @@ app.post('/api/login', async (req, res) => {
     } catch (error) {
         console.error('Error en login:', error);
         res.status(500).json({ error: 'Error al iniciar sesión' });
+    }
+});
+
+// --- AUTENTICACIÓN PROTEGIDA DEL ADMINISTRADOR ---
+app.post('/api/admin/login', (req, res) => {
+    try {
+        const { password } = req.body;
+        const passwordAdminReal = process.env.ADMIN_PASSWORD || "MiClaveSuperSecreta123";
+
+        if (password === passwordAdminReal) {
+            return res.status(200).json({ success: true, mensaje: 'Acceso de administrador autorizado' });
+        } else {
+            return res.status(401).json({ success: false, error: 'Contraseña de administrador incorrecta' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Error al validar credenciales del administrador' });
     }
 });
 

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración | TecniPro</title>
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo">
+            <a href="index.html"><img src="./assets/img/logo-navbar.png" alt="Logo TecniPro" class="logo-img"></a>
+        </div>
+        <div class="user-nav">
+            <span class="welcome-user">Admin: <strong style="color: var(--red-neon);">Gestión Total</strong></span>
+            <a href="index.html" class="btn-secondary">Ir al Sitio</a>
+        </div>
+    </header>
+
+    <main class="dashboard-main">
+        <section class="dashboard-container">
+            <h2>Panel de Control - Administrador</h2>
+            <p class="dashboard-subtitle">Gestiona todas las solicitudes de servicio técnico y actualiza el estado de
+                los equipos en tiempo real.</p>
+
+            <div id="admin-lista-servicios">
+            </div>
+        </section>
+    </main>
+
+    <script src="./js/admin.js"></script>
+</body>
+
+</html>
