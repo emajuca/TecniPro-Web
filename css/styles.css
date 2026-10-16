@@ -73,6 +73,7 @@ body {
 .btn-secondary {
     color: var(--text-main);
     text-decoration: none;
+    background-color: transparent;
     padding: 10px 20px;
     border: 1px solid var(--text-muted);
     border-radius: 8px;

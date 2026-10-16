@@ -15,13 +15,14 @@ mongoose.connect(MONGO_URI)
     .then(() => console.log('🟢 Conectado exitosamente a MongoDB Atlas'))
     .catch(err => console.error('🔴 Error al conectar a MongoDB:', err));
 
-// --- MODELO Y RUTA DE CONTACTO ---
+// --- MODELO Y RUTA DE CONTACTO / SERVICIOS ---
 const serviceSchema = new mongoose.Schema({
     nombre: String,
     email: String,
     telefono: String,
     servicio: String,
     mensaje: String,
+    estado: { type: String, default: 'En Revisión' },
     fecha: { type: Date, default: Date.now }
 });
 
@@ -33,10 +34,43 @@ app.post('/api/contacto', async (req, res) => {
         await nuevaSolicitud.save();
         res.status(201).json({ mensaje: '¡Solicitud guardada en MongoDB con éxito!' });
     } catch (error) {
+        console.error('Error al guardar contacto:', error);
         res.status(500).json({ error: 'Hubo un error al guardar la solicitud' });
     }
 });
 
+// --- OBTENER SERVICIOS DE UN USUARIO POR EMAIL ---
+app.get('/api/servicios/:email', async (req, res) => {
+    try {
+        const { email } = req.params;
+        const servicios = await ServiceRequest.find({ email: email }).sort({ fecha: -1 });
+        res.json(servicios);
+    } catch (error) {
+        console.error('Error al obtener servicios:', error);
+        res.status(500).json({ error: 'Error al obtener los servicios' });
+    }
+});
+
+// --- ACTUALIZAR UN SERVICIO ---
+app.put('/api/servicios/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { mensaje } = req.body;
+
+        const servicioActualizado = await ServiceRequest.findByIdAndUpdate(
+            id,
+            { mensaje },
+            { new: true }
+        );
+
+        res.json({ mensaje: 'Servicio actualizado correctamente', servicio: servicioActualizado });
+    } catch (error) {
+        console.error('Error al actualizar servicio:', error);
+        res.status(500).json({ error: 'Error al actualizar el servicio' });
+    }
+});
+
+// --- MODELO Y RUTAS DE USUARIOS ---
 const userSchema = new mongoose.Schema({
     nombre: { type: String, required: true },
     email: { type: String, required: true, unique: true },
@@ -110,7 +144,7 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
-// --- INICIAR SERVIDOR AL FINAL ---
+// --- INICIAR SERVIDOR ---
 app.listen(PORT, () => {
-    console.log(` Servidor corriendo en http://localhost:${PORT}`);
+    console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
 });
