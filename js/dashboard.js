@@ -99,6 +99,12 @@ async function cargarServiciosUsuario(email) {
                         <i class="fa-solid fa-pen"></i> Modificar detalle
                     </button>
                 </div>
+                <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end;">
+                    <button class="btn-secondary" style="padding: 6px 14px; font-size: 0.85rem;">
+                        <i class="fa-solid fa-info-circle"></i> 
+                        <a href="https://wa.me/573138178896?text=Hola,%20necesito%20mas%20informacion%20sobre%20un%20servicio." target="_blank" style="color: inherit; text-decoration: none;">Más información</a>
+                    </button>
+                </div>
             </div>
         `;
         }).join('');
