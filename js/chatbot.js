@@ -293,13 +293,14 @@
     // ---------- Estado de las solicitudes ----------
     async function checkStatus() {
         let user = null;
+        const token = sessionStorage.getItem('clienteToken');
         try {
             user = JSON.parse(localStorage.getItem('usuarioTecniPro') || 'null');
         } catch (error) {
             user = null;
         }
 
-        if (!user || !user.email) {
+        if (!user || !user.email || !token) {
             await botSay(
                 'Para consultar el estado de tu equipo necesitas **iniciar sesión**. Si aún no tienes cuenta, puedes solicitar el servicio desde el formulario.',
                 [
@@ -312,7 +313,23 @@
 
         showTyping();
         try {
-            const res = await fetch(`${API_URL}/api/servicios/${encodeURIComponent(user.email)}`);
+            const res = await fetch(`${API_URL}/api/mis-servicios`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (res.status === 401 || res.status === 403) {
+                hideTyping();
+                sessionStorage.removeItem('clienteToken');
+                await botSay(
+                    'Tu sesión expiró. Vuelve a **iniciar sesión** para consultar el estado de tu equipo.',
+                    [
+                        { label: 'Iniciar sesión', value: 'action:login' },
+                        { label: 'Solicitar servicio', value: 'action:prefill' }
+                    ]
+                );
+                return;
+            }
+
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             const servicios = await res.json();
             hideTyping();

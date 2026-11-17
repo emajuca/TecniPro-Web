@@ -9,9 +9,12 @@ const escapeHtml = (text) => String(text ?? '')
 
 document.addEventListener('DOMContentLoaded', async () => {
     const usuarioGuardado = localStorage.getItem('usuarioTecniPro');
+    const token = sessionStorage.getItem('clienteToken');
 
-    // 1. Validar sesión activa
-    if (!usuarioGuardado) {
+    // 1. Validar sesión activa (usuario + token de la API)
+    if (!usuarioGuardado || !token) {
+        localStorage.removeItem('usuarioTecniPro');
+        sessionStorage.removeItem('clienteToken');
         alert('Acceso no autorizado. Por favor, inicia sesión.');
         window.location.href = 'index.html';
         return;
@@ -22,6 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         usuario = JSON.parse(usuarioGuardado);
     } catch (error) {
         localStorage.removeItem('usuarioTecniPro');
+        sessionStorage.removeItem('clienteToken');
         alert('Tu sesión no es válida. Inicia sesión de nuevo.');
         window.location.href = 'index.html';
         return;
@@ -38,15 +42,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         logoutBtn.addEventListener('click', (e) => {
             e.preventDefault();
             localStorage.removeItem('usuarioTecniPro');
+            sessionStorage.removeItem('clienteToken');
             window.location.href = 'index.html';
         });
     }
 
     // 3. Cargar dinámicamente los servicios y la barra de progreso
-    await cargarServiciosUsuario(usuario.email);
+    await cargarServiciosUsuario();
 });
 
-async function cargarServiciosUsuario(email) {
+async function cargarServiciosUsuario() {
     const contenedor = document.querySelector('.dashboard-container');
     if (!contenedor) return;
 
@@ -58,7 +63,19 @@ async function cargarServiciosUsuario(email) {
     }
 
     try {
-        const res = await fetch(`${API_URL}/api/servicios/${encodeURIComponent(email)}`);
+        const token = sessionStorage.getItem('clienteToken');
+        const res = await fetch(`${API_URL}/api/mis-servicios`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (res.status === 401 || res.status === 403) {
+            localStorage.removeItem('usuarioTecniPro');
+            sessionStorage.removeItem('clienteToken');
+            alert('Tu sesión expiró. Inicia sesión de nuevo.');
+            window.location.href = 'index.html';
+            return;
+        }
+
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const servicios = await res.json();
 
@@ -154,18 +171,30 @@ async function editarServicio(id, mensajeActual) {
     if (!nuevoMensaje || nuevoMensaje.trim() === '') return;
 
     try {
-        const res = await fetch(`${API_URL}/api/servicios/${id}`, {
+        const token = sessionStorage.getItem('clienteToken');
+        const res = await fetch(`${API_URL}/api/mis-servicios/${encodeURIComponent(id)}`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
             body: JSON.stringify({ mensaje: nuevoMensaje })
         });
 
+        if (res.status === 401 || res.status === 403) {
+            localStorage.removeItem('usuarioTecniPro');
+            sessionStorage.removeItem('clienteToken');
+            alert('Tu sesión expiró. Inicia sesión de nuevo.');
+            window.location.href = 'index.html';
+            return;
+        }
+
         if (res.ok) {
             alert('¡Solicitud actualizada con éxito!');
-            const usuario = JSON.parse(localStorage.getItem('usuarioTecniPro'));
-            cargarServiciosUsuario(usuario.email);
+            cargarServiciosUsuario();
         } else {
-            alert('No se pudo actualizar la solicitud.');
+            const data = await res.json().catch(() => ({}));
+            alert(data.error || 'No se pudo actualizar la solicitud.');
         }
     } catch (error) {
         console.error('Error al editar servicio:', error);

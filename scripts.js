@@ -74,11 +74,12 @@ if (modalLoginForm) {
 
             const data = await res.json();
 
-            if (res.ok) {
+            if (res.ok && data.usuario && data.token) {
                 mostrarToast(`¡Bienvenido, ${data.usuario.nombre}!`, 'exito');
 
                 // Guardar la sesión localmente
                 localStorage.setItem('usuarioTecniPro', JSON.stringify(data.usuario));
+                sessionStorage.setItem('clienteToken', data.token);
 
                 const loginModal = document.getElementById('loginModal');
                 if (loginModal) loginModal.classList.remove('active');
