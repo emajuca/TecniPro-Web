@@ -16,4 +16,16 @@
     window.TECNIPRO_API = isLocal
         ? 'http://localhost:3000'
         : 'https://tecnipro-api.onrender.com';
+
+    // Etiquetas legibles para los valores internos del catálogo.
+    window.TECNIPRO_SERVICIOS = {
+        computadores: 'Computador / Laptop',
+        celulares: 'Celular / Tablet',
+        consolas: 'Consola / PC Gamer'
+    };
+
+    window.nombreServicio = (valor) => {
+        const clave = String(valor || '').trim().toLowerCase();
+        return window.TECNIPRO_SERVICIOS[clave] || valor || 'Soporte Técnico';
+    };
 })();

@@ -7,6 +7,10 @@ const escapeHtml = (text) => String(text ?? '')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
 
+const etiquetaServicio = (valor) => window.nombreServicio
+    ? window.nombreServicio(valor)
+    : (valor || 'Soporte Técnico');
+
 document.addEventListener('DOMContentLoaded', async () => {
     const usuarioGuardado = localStorage.getItem('usuarioTecniPro');
     const token = sessionStorage.getItem('clienteToken');
@@ -100,7 +104,7 @@ async function cargarServiciosUsuario() {
             return `
             <div class="card-box active-service-card" id="servicio-${escapeHtml(s._id)}" style="margin-top: 20px;">
                 <div class="service-header-info">
-                    <h3><i class="fa-solid fa-screwdriver-wrench"></i> Dispositivo: ${escapeHtml(s.servicio || 'Soporte Técnico')}</h3>
+                    <h3><i class="fa-solid fa-screwdriver-wrench"></i> Dispositivo: ${escapeHtml(etiquetaServicio(s.servicio))}</h3>
                     <span class="status-badge in-progress">${escapeHtml(estado)}</span>
                 </div>
                 <p class="device-issue"><strong>Detalle del problema:</strong> ${escapeHtml(s.mensaje || '')}</p>

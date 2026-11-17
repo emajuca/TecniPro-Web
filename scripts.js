@@ -50,6 +50,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.target === loginModal) closeModal();
         });
     }
+
+    // Al hacer clic en "Cotizar", preselecciona el servicio en el formulario.
+    document.querySelectorAll('[data-servicio]').forEach((enlace) => {
+        enlace.addEventListener('click', () => {
+            const select = document.querySelector('#contactForm [name="servicio"]');
+            if (select) select.value = enlace.dataset.servicio;
+        });
+    });
 });
 
 const modalLoginForm = document.getElementById('modalLoginForm');

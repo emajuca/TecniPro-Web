@@ -7,6 +7,10 @@ const escapeHtml = (text) => String(text ?? '')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
 
+const etiquetaServicio = (valor) => window.nombreServicio
+    ? window.nombreServicio(valor)
+    : (valor || 'Soporte Técnico');
+
 document.addEventListener('DOMContentLoaded', async () => {
     let token = sessionStorage.getItem('adminToken');
 
@@ -84,7 +88,7 @@ async function cargarTodasLasSolicitudes() {
                     <h3><i class="fa-solid fa-user"></i> ${escapeHtml(s.nombre)} (${escapeHtml(s.email)})</h3>
                     <span class="status-badge">${escapeHtml(s.estado || 'Recibido')}</span>
                 </div>
-                <p style="color: var(--text-main); margin-bottom: 5px;"><strong>Dispositivo/Servicio:</strong> ${escapeHtml(s.servicio)}</p>
+                <p style="color: var(--text-main); margin-bottom: 5px;"><strong>Dispositivo/Servicio:</strong> ${escapeHtml(etiquetaServicio(s.servicio))}</p>
                 <p class="device-issue"><strong>Problema:</strong> ${escapeHtml(s.mensaje)}</p>
                 <p class="service-meta"><i class="fa-solid fa-phone"></i> Teléfono: ${escapeHtml(s.telefono)} | Fecha: ${new Date(s.fecha).toLocaleString()}</p>
 

@@ -16,6 +16,9 @@
     // se puede definir window.TECNIPRO_API antes de cargar este script.
     const API_URL = window.TECNIPRO_API || 'http://localhost:3000';
     const WHATSAPP = 'https://wa.me/573138178896?text=' + encodeURIComponent('Hola, necesito soporte técnico a domicilio.');
+    const etiquetaServicio = (valor) => window.nombreServicio
+        ? window.nombreServicio(valor)
+        : (valor || 'Soporte Técnico');
 
     // ---------- Referencias al DOM ----------
     const panel = document.getElementById('chatbotPanel');
@@ -351,7 +354,7 @@
             const extra = servicios.length > 1 ? `Tienes ${servicios.length} solicitudes en total. ` : '';
 
             await botSay(
-                `Hola **${user.nombre || 'cliente'}**. Tu solicitud más reciente es:\n\n**${servicio.servicio || 'Soporte técnico'}**\nEstado: **${estado}**\nFecha: ${fecha}\n\n${extra}Para ver el detalle completo, entra a tu panel.`,
+                `Hola **${user.nombre || 'cliente'}**. Tu solicitud más reciente es:\n\n**${etiquetaServicio(servicio.servicio)}**\nEstado: **${estado}**\nFecha: ${fecha}\n\n${extra}Para ver el detalle completo, entra a tu panel.`,
                 [
                     { label: 'Abrir mi panel', value: 'action:dashboard' },
                     { label: 'Hablar con un técnico', value: 'action:humano' }
