@@ -10,7 +10,7 @@
     height: 60px;
     border: none;
     border-radius: 50%;
-    background: linear-gradient(135deg, #ff2a2a, #b30000);
+    background: linear-gradient(180deg, #6d0000 10%, var(--red-neon) 90%);
     color: #ffffff;
     font-size: 26px;
     display: flex;
@@ -18,7 +18,7 @@
     justify-content: center;
     cursor: pointer;
     z-index: 1500;
-    box-shadow: 0 4px 18px var(--red-glow);
+    box-shadow: 0 4px 15px var(--bg-dark);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -312,11 +312,11 @@
 /* En móviles el chat ocupa toda la pantalla para no tapar el formulario. */
 @media (max-width: 600px) {
     .chatbot-toggle {
-        bottom: 95px;
-        right: 18px;
-        width: 54px;
-        height: 54px;
-        font-size: 23px;
+        bottom: 100px;
+        right: 25px;
+        width: 60px;
+        height: 60px;
+        font-size: 26px;
     }
 
     .chatbot-panel {
