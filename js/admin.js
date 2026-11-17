@@ -1,3 +1,5 @@
+const API_URL = window.TECNIPRO_API || 'http://localhost:3000';
+
 document.addEventListener('DOMContentLoaded', async () => {
     let auth = sessionStorage.getItem('adminAuth');
 
@@ -10,7 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         try {
             // Validar clave contra la API protegida
-            const response = await fetch('http://localhost:3000/api/admin/login', {
+            const response = await fetch(`${API_URL}/api/admin/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ password: passwordIngresada })
@@ -40,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function cargarTodasLasSolicitudes() {
     const contenedor = document.getElementById('admin-lista-servicios');
     try {
-        const res = await fetch('http://localhost:3000/api/admin/servicios');
+        const res = await fetch(`${API_URL}/api/admin/servicios`);
         const servicios = await res.json();
 
         if (!servicios || servicios.length === 0) {
@@ -81,7 +83,7 @@ async function actualizarEstado(id) {
     const nuevoEstado = select.value;
 
     try {
-        const res = await fetch(`http://localhost:3000/api/servicios/${id}`, {
+        const res = await fetch(`${API_URL}/api/servicios/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ estado: nuevoEstado })

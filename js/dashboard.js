@@ -1,3 +1,5 @@
+const API_URL = window.TECNIPRO_API || 'http://localhost:3000';
+
 document.addEventListener('DOMContentLoaded', async () => {
     const usuarioGuardado = localStorage.getItem('usuarioTecniPro');
 
@@ -33,7 +35,7 @@ async function cargarServiciosUsuario(email) {
     if (!contenedor) return;
 
     try {
-        const res = await fetch(`http://localhost:3000/api/servicios/${email}`);
+        const res = await fetch(`${API_URL}/api/servicios/${email}`);
         const servicios = await res.json();
 
         let serviciosSec = document.getElementById('lista-servicios');
@@ -119,7 +121,7 @@ async function editarServicio(id, mensajeActual) {
     if (!nuevoMensaje || nuevoMensaje.trim() === '') return;
 
     try {
-        const res = await fetch(`http://localhost:3000/api/servicios/${id}`, {
+        const res = await fetch(`${API_URL}/api/servicios/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ mensaje: nuevoMensaje })

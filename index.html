@@ -7,6 +7,7 @@
     <title>TecniPro | Servicio Técnico a Domicilio</title>
     <link rel="stylesheet" href="./css/reset.css">
     <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/chatbot.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
@@ -245,9 +246,38 @@
         </div>
     </div>
 
+    <!-- Asistente virtual TecniBot -->
+    <button id="chatbotToggle" class="chatbot-toggle" type="button" aria-label="Abrir asistente virtual"
+        aria-expanded="false" aria-controls="chatbotPanel">
+        <i class="fa-solid fa-robot"></i>
+        <span class="chatbot-badge">IA</span>
+    </button>
+
+    <section id="chatbotPanel" class="chatbot-panel" aria-hidden="true" aria-label="Asistente virtual TecniBot">
+        <header class="chatbot-header">
+            <div class="chatbot-avatar"><i class="fa-solid fa-robot"></i></div>
+            <div class="chatbot-info">
+                <strong>TecniBot</strong>
+                <span><i class="fa-solid fa-circle"></i> Asistente virtual</span>
+            </div>
+            <button type="button" id="chatbotClose" class="chatbot-close" aria-label="Cerrar asistente">&times;</button>
+        </header>
+
+        <div id="chatbotMessages" class="chatbot-messages" role="log" aria-live="polite"
+            aria-label="Conversación con TecniBot"></div>
+
+        <form id="chatbotForm" class="chatbot-form">
+            <input id="chatbotInput" type="text" maxlength="200" autocomplete="off"
+                placeholder="Escribe tu pregunta..." aria-label="Escribe tu mensaje para TecniBot">
+            <button type="submit" aria-label="Enviar mensaje"><i class="fa-solid fa-paper-plane"></i></button>
+        </form>
+    </section>
+
     <div id="toast-container" class="toast-container"></div>
 
+    <script src="./js/config.js"></script>
     <script src="./scripts.js"></script>
+    <script src="./js/chatbot.js"></script>
 </body>
 
 </html>

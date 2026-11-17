@@ -178,6 +178,11 @@ app.post('/api/admin/login', (req, res) => {
     }
 });
 
+// --- RUTA DE SALUD (para verificar el despliegue) ---
+app.get('/', (req, res) => {
+    res.json({ service: 'TecniPro API', status: 'ok' });
+});
+
 // --- INICIAR SERVIDOR ---
 app.listen(PORT, () => {
     console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
