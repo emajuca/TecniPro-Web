@@ -14,6 +14,10 @@ const MONGO_URI = process.env.MONGO_URI;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 const JWT_SECRET = process.env.JWT_SECRET || ADMIN_PASSWORD;
 
+// Los emails se guardan y se buscan siempre sin espacios y en minúsculas.
+const normalizarEmail = (email) => String(email || '').trim().toLowerCase();
+const COLACION_EMAIL = { locale: 'es', strength: 2 };
+
 // Verifica el token que entrega /api/admin/login.
 function requireAdmin(req, res, next) {
     const header = req.headers.authorization || '';
@@ -63,7 +67,7 @@ mongoose.connect(MONGO_URI)
 // --- MODELO Y RUTAS DE SERVICIOS / CONTACTO ---
 const serviceSchema = new mongoose.Schema({
     nombre: String,
-    email: String,
+    email: { type: String, lowercase: true, trim: true },
     telefono: String,
     servicio: String,
     mensaje: String,
@@ -76,7 +80,14 @@ const ServiceRequest = mongoose.model('ServiceRequest', serviceSchema);
 // Crear nueva solicitud desde el formulario público
 app.post('/api/contacto', async (req, res) => {
     try {
-        const nuevaSolicitud = new ServiceRequest(req.body);
+        const { nombre, email, telefono, servicio, mensaje } = req.body;
+        const nuevaSolicitud = new ServiceRequest({
+            nombre,
+            email: normalizarEmail(email),
+            telefono,
+            servicio,
+            mensaje
+        });
         await nuevaSolicitud.save();
         res.status(201).json({ mensaje: '¡Solicitud guardada en MongoDB con éxito!' });
     } catch (error) {
@@ -136,7 +147,8 @@ app.put('/api/admin/servicios/:id', requireAdmin, async (req, res) => {
 app.get('/api/mis-servicios', requireCliente, async (req, res) => {
     try {
         const servicios = await ServiceRequest
-            .find({ email: req.cliente.email })
+            .find({ email: normalizarEmail(req.cliente.email) })
+            .collation(COLACION_EMAIL)
             .sort({ fecha: -1 });
         res.json(servicios);
     } catch (error) {
@@ -162,10 +174,10 @@ app.put('/api/mis-servicios/:id', requireCliente, async (req, res) => {
         }
 
         const servicioActualizado = await ServiceRequest.findOneAndUpdate(
-            { _id: id, email: req.cliente.email },
+            { _id: id, email: normalizarEmail(req.cliente.email) },
             { mensaje: mensaje.trim() },
             { new: true }
-        );
+        ).collation(COLACION_EMAIL);
 
         if (!servicioActualizado) {
             return res.status(404).json({ error: 'Solicitud no encontrada' });
@@ -181,7 +193,7 @@ app.put('/api/mis-servicios/:id', requireCliente, async (req, res) => {
 // --- MODELO Y RUTAS DE USUARIOS ---
 const userSchema = new mongoose.Schema({
     nombre: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     password: { type: String, required: true },
     fechaRegistro: { type: Date, default: Date.now }
 });
@@ -192,12 +204,16 @@ const User = mongoose.model('User', userSchema);
 app.post('/api/registro', async (req, res) => {
     try {
         const { nombre, email, password } = req.body;
+        const emailNormalizado = normalizarEmail(email);
 
-        if (!nombre || !email || !password) {
+        if (!nombre || !emailNormalizado || !password) {
             return res.status(400).json({ error: 'Todos los campos son obligatorios' });
         }
 
-        const usuarioExiste = await User.findOne({ email });
+        const usuarioExiste = await User
+            .findOne({ email: emailNormalizado })
+            .collation(COLACION_EMAIL);
+
         if (usuarioExiste) {
             return res.status(400).json({ error: 'El correo electrónico ya está registrado' });
         }
@@ -207,7 +223,7 @@ app.post('/api/registro', async (req, res) => {
 
         const nuevoUsuario = new User({
             nombre,
-            email,
+            email: emailNormalizado,
             password: hashedPassword
         });
 
@@ -224,12 +240,16 @@ app.post('/api/registro', async (req, res) => {
 app.post('/api/login', async (req, res) => {
     try {
         const { email, password } = req.body;
+        const emailNormalizado = normalizarEmail(email);
 
-        if (!email || !password) {
+        if (!emailNormalizado || !password) {
             return res.status(400).json({ error: 'Correo y contraseña requeridos' });
         }
 
-        const usuario = await User.findOne({ email });
+        const usuario = await User
+            .findOne({ email: emailNormalizado })
+            .collation(COLACION_EMAIL);
+
         if (!usuario) {
             return res.status(400).json({ error: 'Usuario o contraseña incorrectos' });
         }
@@ -240,7 +260,11 @@ app.post('/api/login', async (req, res) => {
         }
 
         const token = jwt.sign(
-            { role: 'cliente', id: usuario._id.toString(), email: usuario.email },
+            {
+                role: 'cliente',
+                id: usuario._id.toString(),
+                email: normalizarEmail(usuario.email)
+            },
             JWT_SECRET,
             { expiresIn: '8h' }
         );
@@ -251,7 +275,7 @@ app.post('/api/login', async (req, res) => {
             usuario: {
                 id: usuario._id,
                 nombre: usuario.nombre,
-                email: usuario.email
+                email: normalizarEmail(usuario.email)
             }
         });
 
