@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 app.use(cors());
@@ -10,6 +11,29 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 const MONGO_URI = process.env.MONGO_URI;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+const JWT_SECRET = process.env.JWT_SECRET || ADMIN_PASSWORD;
+
+// Verifica el token que entrega /api/admin/login.
+function requireAdmin(req, res, next) {
+    const header = req.headers.authorization || '';
+    const token = header.startsWith('Bearer ') ? header.slice(7) : '';
+
+    if (!token) {
+        return res.status(401).json({ error: 'Token de administrador requerido' });
+    }
+
+    try {
+        const payload = jwt.verify(token, JWT_SECRET);
+        if (payload.role !== 'admin') {
+            return res.status(403).json({ error: 'No autorizado' });
+        }
+        req.admin = payload;
+        next();
+    } catch (error) {
+        return res.status(401).json({ error: 'Token inválido o expirado' });
+    }
+}
 
 mongoose.connect(MONGO_URI)
     .then(() => console.log('🟢 Conectado exitosamente a MongoDB Atlas'))
@@ -41,13 +65,49 @@ app.post('/api/contacto', async (req, res) => {
 });
 
 // Obtener todas las solicitudes (Para el Panel Admin)
-app.get('/api/admin/servicios', async (req, res) => {
+app.get('/api/admin/servicios', requireAdmin, async (req, res) => {
     try {
         const servicios = await ServiceRequest.find().sort({ fecha: -1 });
         res.json(servicios);
     } catch (error) {
         console.error('Error al obtener servicios admin:', error);
         res.status(500).json({ error: 'Error al obtener todos los servicios' });
+    }
+});
+
+// Actualizar estado o detalle de una solicitud (solo administrador)
+app.put('/api/admin/servicios/:id', requireAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (!mongoose.isValidObjectId(id)) {
+            return res.status(400).json({ error: 'ID de servicio inválido' });
+        }
+
+        const { mensaje, estado } = req.body;
+        const ESTADOS = ['Recibido', 'Diagnóstico', 'En Proceso', 'Entregado'];
+        const updateData = {};
+
+        if (mensaje !== undefined) updateData.mensaje = mensaje;
+        if (estado !== undefined) {
+            if (!ESTADOS.includes(estado)) {
+                return res.status(400).json({ error: 'Estado inválido' });
+            }
+            updateData.estado = estado;
+        }
+
+        if (Object.keys(updateData).length === 0) {
+            return res.status(400).json({ error: 'Nada que actualizar' });
+        }
+
+        const servicio = await ServiceRequest.findByIdAndUpdate(id, updateData, { new: true });
+        if (!servicio) {
+            return res.status(404).json({ error: 'Solicitud no encontrada' });
+        }
+
+        res.json({ mensaje: 'Servicio actualizado correctamente', servicio });
+    } catch (error) {
+        console.error('Error al actualizar servicio (admin):', error);
+        res.status(500).json({ error: 'Error al actualizar el servicio' });
     }
 });
 
@@ -67,17 +127,28 @@ app.get('/api/servicios/:email', async (req, res) => {
 app.put('/api/servicios/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const { mensaje, estado } = req.body;
+        if (!mongoose.isValidObjectId(id)) {
+            return res.status(400).json({ error: 'ID de servicio inválido' });
+        }
 
+        const { mensaje, estado } = req.body;
         const updateData = {};
         if (mensaje !== undefined) updateData.mensaje = mensaje;
         if (estado !== undefined) updateData.estado = estado;
+
+        if (Object.keys(updateData).length === 0) {
+            return res.status(400).json({ error: 'Nada que actualizar' });
+        }
 
         const servicioActualizado = await ServiceRequest.findByIdAndUpdate(
             id,
             updateData,
             { new: true }
         );
+
+        if (!servicioActualizado) {
+            return res.status(404).json({ error: 'Solicitud no encontrada' });
+        }
 
         res.json({ mensaje: 'Servicio actualizado correctamente', servicio: servicioActualizado });
     } catch (error) {
@@ -166,14 +237,23 @@ app.post('/api/login', async (req, res) => {
 app.post('/api/admin/login', (req, res) => {
     try {
         const { password } = req.body;
-        const passwordAdminReal = process.env.ADMIN_PASSWORD || "MiClaveSuperSecreta123";
 
-        if (password === passwordAdminReal) {
-            return res.status(200).json({ success: true, mensaje: 'Acceso de administrador autorizado' });
-        } else {
-            return res.status(401).json({ success: false, error: 'Contraseña de administrador incorrecta' });
+        if (!ADMIN_PASSWORD) {
+            return res.status(500).json({ success: false, error: 'Administrador no configurado en el servidor' });
         }
+
+        if (password === ADMIN_PASSWORD) {
+            const token = jwt.sign({ role: 'admin' }, JWT_SECRET, { expiresIn: '2h' });
+            return res.status(200).json({
+                success: true,
+                token,
+                mensaje: 'Acceso de administrador autorizado'
+            });
+        }
+
+        return res.status(401).json({ success: false, error: 'Contraseña de administrador incorrecta' });
     } catch (error) {
+        console.error('Error validando administrador:', error);
         res.status(500).json({ error: 'Error al validar credenciales del administrador' });
     }
 });

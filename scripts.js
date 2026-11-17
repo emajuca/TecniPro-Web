@@ -7,8 +7,14 @@ function mostrarToast(mensaje, tipo = 'exito') {
     const toast = document.createElement('div');
     toast.className = `toast ${tipo === 'error' ? 'toast-error' : ''}`;
 
-    const icono = tipo === 'exito' ? '✅' : '❌';
-    toast.innerHTML = `<span class="toast-icon">${icono}</span> <span>${mensaje}</span>`;
+    const icono = document.createElement('span');
+    icono.className = 'toast-icon';
+    icono.textContent = tipo === 'exito' ? '✅' : '❌';
+
+    const texto = document.createElement('span');
+    texto.textContent = mensaje;
+
+    toast.append(icono, ' ', texto);
 
     container.appendChild(toast);
 

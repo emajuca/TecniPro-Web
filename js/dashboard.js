@@ -1,5 +1,12 @@
 const API_URL = window.TECNIPRO_API || 'http://localhost:3000';
 
+const escapeHtml = (text) => String(text ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+
 document.addEventListener('DOMContentLoaded', async () => {
     const usuarioGuardado = localStorage.getItem('usuarioTecniPro');
 
@@ -10,7 +17,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    const usuario = JSON.parse(usuarioGuardado);
+    let usuario;
+    try {
+        usuario = JSON.parse(usuarioGuardado);
+    } catch (error) {
+        localStorage.removeItem('usuarioTecniPro');
+        alert('Tu sesión no es válida. Inicia sesión de nuevo.');
+        window.location.href = 'index.html';
+        return;
+    }
+
     const saludoElemento = document.getElementById('userName');
     if (saludoElemento && usuario.nombre) {
         saludoElemento.textContent = usuario.nombre;
@@ -34,16 +50,17 @@ async function cargarServiciosUsuario(email) {
     const contenedor = document.querySelector('.dashboard-container');
     if (!contenedor) return;
 
-    try {
-        const res = await fetch(`${API_URL}/api/servicios/${email}`);
-        const servicios = await res.json();
+    let serviciosSec = document.getElementById('lista-servicios');
+    if (!serviciosSec) {
+        serviciosSec = document.createElement('div');
+        serviciosSec.id = 'lista-servicios';
+        contenedor.appendChild(serviciosSec);
+    }
 
-        let serviciosSec = document.getElementById('lista-servicios');
-        if (!serviciosSec) {
-            serviciosSec = document.createElement('div');
-            serviciosSec.id = 'lista-servicios';
-            contenedor.appendChild(serviciosSec);
-        }
+    try {
+        const res = await fetch(`${API_URL}/api/servicios/${encodeURIComponent(email)}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const servicios = await res.json();
 
         if (!servicios || servicios.length === 0) {
             serviciosSec.innerHTML = `
@@ -64,12 +81,12 @@ async function cargarServiciosUsuario(email) {
             const p4 = estado === 'Entregado' ? 'completed active' : '';
 
             return `
-            <div class="card-box active-service-card" id="servicio-${s._id}" style="margin-top: 20px;">
+            <div class="card-box active-service-card" id="servicio-${escapeHtml(s._id)}" style="margin-top: 20px;">
                 <div class="service-header-info">
-                    <h3><i class="fa-solid fa-screwdriver-wrench"></i> Dispositivo: ${s.servicio || 'Soporte Técnico'}</h3>
-                    <span class="status-badge in-progress">${estado}</span>
+                    <h3><i class="fa-solid fa-screwdriver-wrench"></i> Dispositivo: ${escapeHtml(s.servicio || 'Soporte Técnico')}</h3>
+                    <span class="status-badge in-progress">${escapeHtml(estado)}</span>
                 </div>
-                <p class="device-issue"><strong>Detalle del problema:</strong> ${s.mensaje}</p>
+                <p class="device-issue"><strong>Detalle del problema:</strong> ${escapeHtml(s.mensaje || '')}</p>
 
                 <!-- Barra de Progreso Visual de 4 Pasos -->
                 <div class="progress-tracker">
@@ -92,27 +109,43 @@ async function cargarServiciosUsuario(email) {
                 </div>
 
                 <div class="service-meta">
-                    <p><i class="fa-solid fa-phone"></i> Contacto registrado: ${s.telefono || 'N/A'}</p>
+                    <p><i class="fa-solid fa-phone"></i> Contacto registrado: ${escapeHtml(s.telefono || 'N/A')}</p>
                     <p><i class="fa-solid fa-calendar"></i> Fecha de solicitud: ${new Date(s.fecha).toLocaleDateString()}</p>
                 </div>
 
                 <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end;">
-                    <button onclick="editarServicio('${s._id}', '${s.mensaje.replace(/'/g, "\\'")}')" class="btn-secondary" style="padding: 6px 14px; font-size: 0.85rem;">
+                    <button type="button" class="btn-secondary btn-editar"
+                        data-id="${escapeHtml(s._id)}"
+                        data-mensaje="${escapeHtml(s.mensaje || '')}"
+                        style="padding: 6px 14px; font-size: 0.85rem;">
                         <i class="fa-solid fa-pen"></i> Modificar detalle
                     </button>
                 </div>
                 <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end;">
                     <button class="btn-secondary" style="padding: 6px 14px; font-size: 0.85rem;">
                         <i class="fa-solid fa-info-circle"></i> 
-                        <a href="https://wa.me/573138178896?text=Hola,%20necesito%20mas%20informacion%20sobre%20un%20servicio." target="_blank" style="color: inherit; text-decoration: none;">Más información</a>
+                        <a href="https://wa.me/573138178896?text=Hola,%20necesito%20mas%20informacion%20sobre%20un%20servicio." target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">Más información</a>
                     </button>
                 </div>
             </div>
         `;
         }).join('');
 
+        serviciosSec.querySelectorAll('.btn-editar').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                editarServicio(btn.dataset.id, btn.dataset.mensaje);
+            });
+        });
+
     } catch (error) {
         console.error('Error cargando servicios:', error);
+        serviciosSec.innerHTML = `
+            <div class="card-box" style="text-align: center; padding: 40px; margin-top: 20px;">
+                <i class="fa-solid fa-plug-circle-xmark" style="font-size: 2.5rem; color: var(--text-muted); margin-bottom: 15px;"></i>
+                <h3>No se pudieron cargar tus servicios</h3>
+                <p style="color: var(--text-muted); margin-top: 10px;">Revisa tu conexión y recarga la página.</p>
+            </div>
+        `;
     }
 }
 
