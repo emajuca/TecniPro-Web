@@ -33,6 +33,27 @@
     font-size: 0.95rem;
 }
 
+/* Encabezado unificado con el perfil de cliente */
+.dashboard-header .profile-menu {
+    min-width: 200px;
+}
+
+@media (max-width: 600px) {
+    .dashboard-header .profile-btn {
+        padding: 4px 10px 4px 4px;
+    }
+
+    .dashboard-header .profile-name {
+        max-width: 110px;
+    }
+}
+
+@media (max-width: 380px) {
+    .dashboard-header .profile-name {
+        max-width: 80px;
+    }
+}
+
 .active-service-card {
     background-color: var(--bg-card);
     padding: 30px;
@@ -47,6 +68,17 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
+}
+
+@media (max-width: 600px) {
+    .active-service-card {
+        padding: 22px;
+    }
+
+    .service-header-info {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
 }
 
 .status-badge {

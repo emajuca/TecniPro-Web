@@ -49,12 +49,44 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    const saludoElemento = document.getElementById('userName');
-    if (saludoElemento && usuario.nombre) {
-        saludoElemento.textContent = usuario.nombre;
+    // 2. Mostrar el perfil del cliente y su menú de cuenta
+    const nombreCliente = usuario.nombre ? String(usuario.nombre).trim() : 'Cliente';
+    const perfilNombre = document.getElementById('profileName');
+    const perfilInicial = document.getElementById('profileInitial');
+    if (perfilNombre) perfilNombre.textContent = nombreCliente;
+    if (perfilInicial) perfilInicial.textContent = nombreCliente.charAt(0).toUpperCase();
+
+    const profileBtn = document.getElementById('profileBtn');
+    const profileMenu = document.getElementById('profileMenu');
+    const cerrarPerfil = () => {
+        if (!profileMenu || !profileBtn) return;
+        profileMenu.hidden = true;
+        profileBtn.setAttribute('aria-expanded', 'false');
+    };
+
+    if (profileBtn && profileMenu) {
+        profileBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const abrir = profileMenu.hidden;
+            profileMenu.hidden = !abrir;
+            profileBtn.setAttribute('aria-expanded', String(abrir));
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!profileMenu.hidden && !profileMenu.contains(e.target) && !profileBtn.contains(e.target)) {
+                cerrarPerfil();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !profileMenu.hidden) {
+                cerrarPerfil();
+                profileBtn.focus();
+            }
+        });
     }
 
-    // 2. Configurar Botón de Cerrar Sesión
+    // 3. Configurar Botón de Cerrar Sesión
     const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', (e) => {
@@ -65,7 +97,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // 3. Cargar dinámicamente los servicios y la barra de progreso
+    // 4. Cargar dinámicamente los servicios y la barra de progreso
     await cargarServiciosUsuario();
 });
 

@@ -70,6 +70,10 @@ body {
     backdrop-filter: blur(10px);
 }
 
+.logo {
+    flex-shrink: 0;
+}
+
 .logo-img {
     height: 45px;
     width: auto;
@@ -1000,17 +1004,17 @@ body {
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    .account-area {
+    .header-menu .account-area {
         flex-direction: column;
         align-items: stretch;
         margin-top: 18px;
     }
 
-    .account-area > .btn-primary {
+    .header-menu .account-area > .btn-primary {
         width: 100%;
     }
 
-    .profile-btn {
+    .header-menu .profile-btn {
         width: 100%;
         max-width: none;
         justify-content: flex-start;
@@ -1018,13 +1022,13 @@ body {
         border-radius: 10px;
     }
 
-    .profile-name {
+    .header-menu .profile-name {
         flex: 1;
         max-width: none;
         text-align: left;
     }
 
-    .profile-menu {
+    .header-menu .profile-menu {
         position: static;
         width: 100%;
         margin-top: 8px;

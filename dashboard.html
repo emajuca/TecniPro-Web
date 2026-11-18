@@ -6,20 +6,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Panel | TecniPro</title>
     <link rel="stylesheet" href="./css/reset.css">
-    <link rel="stylesheet" href="./css/styles.css">
-    <link rel="stylesheet" href="./css/dashboard.css">
+    <link rel="stylesheet" href="./css/styles.css?v=20261117c">
+    <link rel="stylesheet" href="./css/dashboard.css?v=20261117c">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
     <a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
-    <header class="header">
+    <header class="header dashboard-header">
         <div class="logo">
-            <a href="index.html"><img src="./assets/img/logo-navbar.png" alt="Logo TecniPro" class="logo-img"></a>
+            <a href="index.html"><img src="./assets/img/logo-navbar.png" alt="Logo TecniPro" class="logo-img"
+                    width="384" height="135"></a>
         </div>
-        <div class="user-nav">
-            <span class="welcome-user">Hola, <strong id="userName">Cliente</strong></span>
-            <a href="index.html" class="btn-secondary" id="logoutBtn">Cerrar Sesión</a>
+        <div class="account-area">
+            <button id="profileBtn" class="profile-btn" type="button" aria-expanded="false"
+                aria-controls="profileMenu">
+                <span class="profile-avatar" id="profileInitial" aria-hidden="true">C</span>
+                <span class="profile-name" id="profileName">Cliente</span>
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+            </button>
+            <div class="profile-menu" id="profileMenu" hidden>
+                <a href="index.html" class="profile-menu-item">
+                    <i class="fa-solid fa-house" aria-hidden="true"></i> Ir al inicio
+                </a>
+                <button type="button" id="logoutBtn" class="profile-menu-item profile-logout">
+                    <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Cerrar sesión
+                </button>
+            </div>
         </div>
     </header>
 
@@ -79,7 +92,7 @@
     </footer>
 
     <script src="./js/config.js"></script>
-    <script src="./js/dashboard.js"></script>
+    <script src="./js/dashboard.js?v=20261117c"></script>
     
 </body>
 
