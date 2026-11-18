@@ -84,6 +84,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeBtn = document.getElementById('closeLoginModal');
     let lastFocused = null;
 
+    // El modal cerrado no debe ser enfocable, incluso durante el fundido de salida.
+    if (loginModal && !loginModal.classList.contains('active')) {
+        loginModal.setAttribute('inert', '');
+    }
+
     const getActiveInput = () => {
         if (!loginModal) return null;
         const visibleForm = [...loginModal.querySelectorAll('.auth-form')]
