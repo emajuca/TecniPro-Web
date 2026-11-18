@@ -679,12 +679,16 @@ body {
 }
 
 .footer-container {
-    max-width: 1200px;
+    max-width: 1600px;
     margin: 0 auto;
     padding: 0 8%;
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
     gap: 40px;
+}
+
+.footer-col {
+    min-width: 0;
 }
 
 .footer-col h3,
@@ -755,6 +759,7 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
+    overflow-wrap: anywhere;
 }
 
 .contact-info-item i {
