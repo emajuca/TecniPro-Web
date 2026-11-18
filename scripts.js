@@ -167,6 +167,153 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+    const menuToggle = document.getElementById('menuToggle');
+    const headerMenu = document.getElementById('headerMenu');
+    const profileBtn = document.getElementById('profileBtn');
+    const profileMenu = document.getElementById('profileMenu');
+    const profileName = document.getElementById('profileName');
+    const profileInitial = document.getElementById('profileInitial');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const loginBtnNav = document.getElementById('openLoginBtn');
+    const loginBtnCard = document.getElementById('openLoginBtn2');
+    const accountCardLoggedOut = document.getElementById('accountCardLoggedOut');
+    const accountCardLoggedIn = document.getElementById('accountCardLoggedIn');
+    const accountCardName = document.getElementById('accountCardName');
+
+    const leerUsuario = () => {
+        try {
+            return JSON.parse(localStorage.getItem('usuarioTecniPro') || 'null');
+        } catch {
+            return null;
+        }
+    };
+
+    const tokenVigente = (token) => {
+        if (!token) return false;
+        try {
+            const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+            const payload = JSON.parse(atob(base64 + '='.repeat((4 - base64.length % 4) % 4)));
+            return typeof payload.exp !== 'number' || payload.exp * 1000 > Date.now();
+        } catch {
+            return false;
+        }
+    };
+
+    const cerrarPerfil = () => {
+        if (!profileMenu || !profileBtn) return;
+        profileMenu.hidden = true;
+        profileBtn.setAttribute('aria-expanded', 'false');
+    };
+
+    const abrirMenuMovil = (abrir) => {
+        if (!headerMenu || !menuToggle) return;
+        headerMenu.classList.toggle('open', abrir);
+        menuToggle.setAttribute('aria-expanded', String(abrir));
+        menuToggle.setAttribute('aria-label', abrir ? 'Cerrar menú' : 'Abrir menú');
+        const icono = menuToggle.querySelector('i');
+        if (icono) {
+            icono.classList.toggle('fa-bars', !abrir);
+            icono.classList.toggle('fa-xmark', abrir);
+        }
+        if (!abrir) cerrarPerfil();
+    };
+
+    const aplicarSesion = () => {
+        const token = sessionStorage.getItem('clienteToken');
+        if (!tokenVigente(token)) {
+            sessionStorage.removeItem('clienteToken');
+            localStorage.removeItem('usuarioTecniPro');
+        }
+
+        const usuario = tokenVigente(token) ? leerUsuario() : null;
+        const activa = Boolean(usuario && usuario.nombre);
+
+        document.body.classList.toggle('cliente-logueado', activa);
+
+        if (loginBtnNav) loginBtnNav.hidden = activa;
+        if (loginBtnCard) loginBtnCard.hidden = activa;
+        if (accountCardLoggedOut) accountCardLoggedOut.hidden = activa;
+        if (accountCardLoggedIn) accountCardLoggedIn.hidden = !activa;
+        if (profileBtn) profileBtn.hidden = !activa;
+
+        if (activa) {
+            const nombre = String(usuario.nombre).trim();
+            if (profileName) profileName.textContent = nombre;
+            if (profileInitial) profileInitial.textContent = nombre.charAt(0).toUpperCase();
+            if (accountCardName) accountCardName.textContent = nombre;
+        } else {
+            cerrarPerfil();
+            abrirMenuMovil(false);
+        }
+    };
+
+    aplicarSesion();
+
+    if (profileBtn && profileMenu) {
+        profileBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const abrir = profileMenu.hidden;
+            profileMenu.hidden = !abrir;
+            profileBtn.setAttribute('aria-expanded', String(abrir));
+        });
+    }
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('usuarioTecniPro');
+            sessionStorage.removeItem('clienteToken');
+            aplicarSesion();
+            mostrarToast('Sesión cerrada correctamente.', 'exito');
+        });
+    }
+
+    [loginBtnNav, loginBtnCard].forEach((boton) => {
+        if (boton) boton.addEventListener('click', () => abrirMenuMovil(false));
+    });
+
+    document.addEventListener('click', (e) => {
+        if (profileMenu && profileBtn && !profileMenu.hidden
+            && !profileMenu.contains(e.target) && !profileBtn.contains(e.target)) {
+            cerrarPerfil();
+        }
+    });
+
+    if (menuToggle && headerMenu) {
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            abrirMenuMovil(!headerMenu.classList.contains('open'));
+        });
+
+        headerMenu.querySelectorAll('a').forEach((enlace) => {
+            enlace.addEventListener('click', () => abrirMenuMovil(false));
+        });
+
+        document.addEventListener('click', (e) => {
+            if (headerMenu.classList.contains('open')
+                && !headerMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+                abrirMenuMovil(false);
+            }
+        });
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 900) abrirMenuMovil(false);
+        });
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key !== 'Escape') return;
+        if (profileMenu && !profileMenu.hidden) {
+            cerrarPerfil();
+            profileBtn.focus();
+        }
+        if (headerMenu && headerMenu.classList.contains('open')) {
+            abrirMenuMovil(false);
+            menuToggle.focus();
+        }
+    });
+});
+
 const modalLoginForm = document.getElementById('modalLoginForm');
 if (modalLoginForm) {
     modalLoginForm.addEventListener('submit', async (e) => {

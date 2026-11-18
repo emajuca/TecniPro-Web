@@ -401,6 +401,11 @@
 
     function openLogin() {
         closeChat();
+        const profileBtn = document.getElementById('profileBtn');
+        if (profileBtn && !profileBtn.hidden) {
+            window.location.href = 'dashboard.html';
+            return;
+        }
         const btn = document.getElementById('openLoginBtn');
         if (btn) {
             btn.click();

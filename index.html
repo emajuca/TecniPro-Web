@@ -18,13 +18,35 @@
         <div class="logo">
             <a href="#inicio"><img src="./assets/img/logo-navbar.png" alt="Logo TecniPro" class="logo-img"></a>
         </div>
-        <nav class="nav-menu" aria-label="Navegación principal">
-            <a href="#servicios">Servicios</a>
-            <a href="#beneficios">¿Por qué nosotros?</a>
-            <a href="#preguntas">Preguntas Frecuentes</a>
-            <a href="#contacto">Contacto</a>
-        </nav>
-        <button id="openLoginBtn" class="btn-primary">Iniciar Sesión</button>
+        <button id="menuToggle" class="menu-toggle" type="button" aria-label="Abrir menú"
+            aria-expanded="false" aria-controls="headerMenu">
+            <i class="fa-solid fa-bars" aria-hidden="true"></i>
+        </button>
+        <div class="header-menu" id="headerMenu">
+            <nav class="nav-menu" aria-label="Navegación principal">
+                <a href="#servicios">Servicios</a>
+                <a href="#beneficios">¿Por qué nosotros?</a>
+                <a href="#preguntas">Preguntas Frecuentes</a>
+                <a href="#contacto">Contacto</a>
+            </nav>
+            <div class="account-area">
+                <button id="openLoginBtn" class="btn-primary" type="button">Iniciar Sesión</button>
+                <button id="profileBtn" class="profile-btn" type="button" aria-expanded="false"
+                    aria-controls="profileMenu" hidden>
+                    <span class="profile-avatar" id="profileInitial" aria-hidden="true">C</span>
+                    <span class="profile-name" id="profileName">Mi cuenta</span>
+                    <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                </button>
+                <div class="profile-menu" id="profileMenu" hidden>
+                    <a href="dashboard.html" class="profile-menu-item">
+                        <i class="fa-solid fa-gauge-high" aria-hidden="true"></i> Mi panel
+                    </a>
+                    <button type="button" id="logoutBtn" class="profile-menu-item profile-logout">
+                        <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Cerrar sesión
+                    </button>
+                </div>
+            </div>
+        </div>
     </header>
 
     <main id="contenido-principal">
@@ -115,16 +137,25 @@
                 <p>Sí, todos nuestros servicios incluyen garantía por defectos de reparación y repuestos utilizados.</p>
             </div>
             <div class="faq-item">
-                <h3>¿Cuánto tiempo toma la reparación?</h3>
+                <h4>¿Cuánto tiempo toma la reparación?</h4>
                 <p>El tiempo de reparación varía según el tipo de servicio y la complejidad del problema. Te informaremos sobre el plazo estimado una vez que lo diagnosticemos.</p>
             </div>
             <div class="faq-item">
-                <h3>¿Qué sucede si no estoy disponible cuando llega el técnico?</h3>
+                <h4>¿Qué sucede si no estoy disponible cuando llega el técnico?</h4>
                 <p>Te informaremos con anticipación sobre la llegada del técnico y podremos coordinar una nueva cita si es necesario.</p>
             </div>
             <div class="faq-item">
-                <h3>¿Cuánto cuesta?</h3>
+                <h4>¿Cuánto cuesta?</h4>
                 <p>El costo de la reparación varía según el tipo de servicio y la complejidad del problema. Te informaremos sobre el costo estimado una vez que recibamos tu dispositivo.</p>
+            </div>
+            <div class="faq-item">
+                <h4>¿Que metodos de pago aceptan?</h4>
+                <p>Aceptamos pagos en efectivo, tarjeta de crédito y débito, y transferencias bancarias.</p>
+                <p>Nequi, Daviplata, PayPal, PSE</p>
+            </div>
+            <div class="faq-item">
+                <h4>¿Donde atienden?</h4>
+                <p>Atendemos en Bogotá.</p>
             </div>
         </section>
 
@@ -156,7 +187,7 @@
                                 <label class="sr-only" for="contacto-telefono">Teléfono o WhatsApp</label>
                                 <input type="tel" id="contacto-telefono" name="telefono"
                                     placeholder="Teléfono / WhatsApp" autocomplete="tel" inputmode="tel"
-                                    pattern="[0-9+\(\) .\-]{7,30}" maxlength="30"
+                                    pattern="[+()0-9 .-]{7,30}" maxlength="30"
                                     aria-describedby="error-telefono" required>
                                 <span class="field-error" id="error-telefono"></span>
                             </div>
@@ -203,9 +234,17 @@
 
                 <div class="card-box">
                     <h3>¿Ya tienes cuenta?</h3>
-                    <p class="login-prompt-text">Accede al portal para revisar el estado técnico de tus equipos.</p>
-                    <button id="openLoginBtn2" class="btn-primary"
-                        style="display: block; width: 100%; margin-top: 20px;">Iniciar Sesión</button>
+                    <div id="accountCardLoggedOut">
+                        <p class="login-prompt-text">Accede al portal para revisar el estado técnico de tus equipos.</p>
+                        <button id="openLoginBtn2" class="btn-primary"
+                            style="display: block; width: 100%; margin-top: 20px;">Iniciar Sesión</button>
+                    </div>
+                    <div id="accountCardLoggedIn" hidden>
+                        <p class="login-prompt-text">Hola, <strong id="accountCardName">Cliente</strong>. Revisa el
+                            estado de tus equipos y el avance de tus solicitudes.</p>
+                        <a href="dashboard.html" class="btn-primary"
+                            style="display: block; width: 100%; margin-top: 20px;">Ir a Mi Panel</a>
+                    </div>
                 </div>
             </div>
         </section>
@@ -229,7 +268,7 @@
             </div>
 
             <div class="footer-col">
-                <h3>Legales & Privacidad</h3>
+                <h4>Legales & Privacidad</h4>
                 <ul>
                     <li><a href="./legal html/politica-privacidad.html" id="open-privacy">Política de Privacidad</a></li>
                     <li><a href="./legal html/terminos-condiciones.html" id="open-terms">Términos y Condiciones</a></li>
@@ -239,11 +278,12 @@
             </div>
 
             <div class="footer-col">
-                <h3>Atención al Cliente</h3>
+                <h4>Atención al Cliente</h4>
                 <p class="contact-info-item"><i class="fa-solid fa-envelope"></i> rinconemanuel71@gmail.com</p>
                 <p class="contact-info-item"><i class="fa-solid fa-phone"></i> +57 313 8178896</p>
                 <p class="contact-info-item"><i class="fa-solid fa-location-dot"></i> Bogotá, Colombia</p>
-                <p class="contact-info-item"><i class="fa-solid fa-clock"></i>Lunes a Viernes: 8:00 AM - 6:00 PM. | Sábados 8:00 AM - 12:00 PM. | Domingos y Festivos: Previa cita.</p>
+                <p class="contact-info-item"><i class="fa-solid fa-clock"></i>Lunes a Viernes: 8:00 AM - 6:00 PM.</p>
+                <p class="contact-info-item"><i class="fa-solid fa-clock"></i>Sábados, Domingos y Festivos: Previa cita.</p>
                 <div class="social-links">
                     <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i
                             class="fa-brands fa-instagram"></i></a>
@@ -252,6 +292,16 @@
                     <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i
                             class="fa-brands fa-facebook-f"></i></a>
                 </div>
+            </div>
+            <div class="footer-col">
+                <h4>Otros</h4>
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#servicios">Servicios</a></li>
+                    <li><a href="#beneficios">¿Por qué nosotros?</a></li>
+                    <li><a href="#preguntas">Preguntas Frecuentes</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
             </div>
         </div>
 
@@ -310,10 +360,10 @@
     </div>
 
     <!-- Asistente virtual TecniBot -->
-    <button id="chatbotToggle" class="chatbot-toggle" type="button" aria-label="Abrir asistente virtual (IA)"
+    <button id="chatbotToggle" class="chatbot-toggle" type="button" aria-label="Abrir asistente virtual"
         aria-expanded="false" aria-controls="chatbotPanel">
-        <i class="fa-solid fa-robot" aria-hidden="true"></i>
-        <span class="chatbot-badge" aria-hidden="true">IA</span>
+        <i class="fa-solid fa-robot"></i>
+        <span class="chatbot-badge">IA</span>
     </button>
 
     <section id="chatbotPanel" class="chatbot-panel" aria-hidden="true" aria-label="Asistente virtual TecniBot">
@@ -340,8 +390,8 @@
         aria-atomic="false"></div>
 
     <script src="./js/config.js"></script>
-    <script src="./scripts.js?v=20261117"></script>
-    <script src="./js/chatbot.js"></script>
+    <script src="./scripts.js?v=20261117b"></script>
+    <script src="./js/chatbot.js?v=20261117b"></script>
 </body>
 
 </html>
