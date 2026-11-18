@@ -679,22 +679,24 @@ body {
 }
 
 .footer-container {
-    max-width: 1600px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0 8%;
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 1fr;
     gap: 40px;
 }
 
-.footer-col h3 {
+.footer-col h3,
+.footer-col h4 {
     color: var(--text-main);
     font-size: 1.1rem;
     margin-bottom: 20px;
     position: relative;
 }
 
-.footer-col h3::after {
+.footer-col h3::after,
+.footer-col h4::after {
     content: '';
     position: absolute;
     left: 0;
