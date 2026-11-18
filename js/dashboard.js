@@ -11,6 +11,20 @@ const etiquetaServicio = (valor) => window.nombreServicio
     ? window.nombreServicio(valor)
     : (valor || 'Soporte Técnico');
 
+function mostrarEstadoDashboard(mensaje, tipo = 'exito') {
+    const status = document.getElementById('dashboard-status');
+    if (!status) return;
+
+    status.textContent = mensaje;
+    status.className = `form-status ${tipo === 'error' ? 'error' : ''}`.trim();
+    status.hidden = false;
+
+    clearTimeout(mostrarEstadoDashboard.timer);
+    mostrarEstadoDashboard.timer = setTimeout(() => {
+        status.hidden = true;
+    }, 6000);
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     const usuarioGuardado = localStorage.getItem('usuarioTecniPro');
     const token = sessionStorage.getItem('clienteToken');
@@ -87,7 +101,7 @@ async function cargarServiciosUsuario() {
             serviciosSec.innerHTML = `
                 <div class="card-box" style="text-align: center; padding: 40px; margin-top: 20px;">
                     <i class="fa-solid fa-folder-open" style="font-size: 2.5rem; color: var(--text-muted); margin-bottom: 15px;"></i>
-                    <h3>No tienes servicios solicitados</h3>
+                    <h2>No tienes servicios solicitados</h2>
                     <p style="color: var(--text-muted); margin-top: 10px;">Solicita un diagnóstico para tu equipo desde la página principal.</p>
                 </div>
             `;
@@ -104,7 +118,7 @@ async function cargarServiciosUsuario() {
             return `
             <div class="card-box active-service-card" id="servicio-${escapeHtml(s._id)}" style="margin-top: 20px;">
                 <div class="service-header-info">
-                    <h3><i class="fa-solid fa-screwdriver-wrench"></i> Dispositivo: ${escapeHtml(etiquetaServicio(s.servicio))}</h3>
+                    <h2><i class="fa-solid fa-screwdriver-wrench"></i> Dispositivo: ${escapeHtml(etiquetaServicio(s.servicio))}</h2>
                     <span class="status-badge in-progress">${escapeHtml(estado)}</span>
                 </div>
                 <p class="device-issue"><strong>Detalle del problema:</strong> ${escapeHtml(s.mensaje || '')}</p>
@@ -134,19 +148,20 @@ async function cargarServiciosUsuario() {
                     <p><i class="fa-solid fa-calendar"></i> Fecha de solicitud: ${new Date(s.fecha).toLocaleDateString()}</p>
                 </div>
 
-                <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end;">
+                <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;">
                     <button type="button" class="btn-secondary btn-editar"
                         data-id="${escapeHtml(s._id)}"
                         data-mensaje="${escapeHtml(s.mensaje || '')}"
+                        aria-label="Modificar detalle de la solicitud de ${escapeHtml(etiquetaServicio(s.servicio))}"
                         style="padding: 6px 14px; font-size: 0.85rem;">
-                        <i class="fa-solid fa-pen"></i> Modificar detalle
+                        <i class="fa-solid fa-pen" aria-hidden="true"></i> Modificar detalle
                     </button>
-                </div>
-                <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end;">
-                    <button class="btn-secondary" style="padding: 6px 14px; font-size: 0.85rem;">
-                        <i class="fa-solid fa-info-circle"></i> 
-                        <a href="https://wa.me/573138178896?text=Hola,%20necesito%20mas%20informacion%20sobre%20un%20servicio." target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">Más información</a>
-                    </button>
+                    <a class="btn-secondary"
+                        href="https://wa.me/573138178896?text=Hola,%20necesito%20mas%20informacion%20sobre%20un%20servicio."
+                        target="_blank" rel="noopener noreferrer"
+                        style="padding: 6px 14px; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px;">
+                        <i class="fa-solid fa-info-circle" aria-hidden="true"></i> Más información por WhatsApp
+                    </a>
                 </div>
             </div>
         `;
@@ -163,7 +178,7 @@ async function cargarServiciosUsuario() {
         serviciosSec.innerHTML = `
             <div class="card-box" style="text-align: center; padding: 40px; margin-top: 20px;">
                 <i class="fa-solid fa-plug-circle-xmark" style="font-size: 2.5rem; color: var(--text-muted); margin-bottom: 15px;"></i>
-                <h3>No se pudieron cargar tus servicios</h3>
+                <h2>No se pudieron cargar tus servicios</h2>
                 <p style="color: var(--text-muted); margin-top: 10px;">Revisa tu conexión y recarga la página.</p>
             </div>
         `;
@@ -194,14 +209,14 @@ async function editarServicio(id, mensajeActual) {
         }
 
         if (res.ok) {
-            alert('¡Solicitud actualizada con éxito!');
+            mostrarEstadoDashboard('Solicitud actualizada correctamente.');
             cargarServiciosUsuario();
         } else {
             const data = await res.json().catch(() => ({}));
-            alert(data.error || 'No se pudo actualizar la solicitud.');
+            mostrarEstadoDashboard(data.error || 'No se pudo actualizar la solicitud.', 'error');
         }
     } catch (error) {
         console.error('Error al editar servicio:', error);
-        alert('Error al conectar con el servidor.');
+        mostrarEstadoDashboard('Error al conectar con el servidor.', 'error');
     }
 }

@@ -11,6 +11,20 @@ const etiquetaServicio = (valor) => window.nombreServicio
     ? window.nombreServicio(valor)
     : (valor || 'Soporte Técnico');
 
+function mostrarEstadoAdmin(mensaje, tipo = 'exito') {
+    const status = document.getElementById('admin-status');
+    if (!status) return;
+
+    status.textContent = mensaje;
+    status.className = `form-status ${tipo === 'error' ? 'error' : ''}`.trim();
+    status.hidden = false;
+
+    clearTimeout(mostrarEstadoAdmin.timer);
+    mostrarEstadoAdmin.timer = setTimeout(() => {
+        status.hidden = true;
+    }, 6000);
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     let token = sessionStorage.getItem('adminToken');
 
@@ -85,7 +99,7 @@ async function cargarTodasLasSolicitudes() {
         contenedor.innerHTML = servicios.map(s => `
             <div class="card-box" style="margin-top: 20px; border-color: rgba(255, 42, 42, 0.4);">
                 <div class="service-header-info">
-                    <h3><i class="fa-solid fa-user"></i> ${escapeHtml(s.nombre)} (${escapeHtml(s.email)})</h3>
+                    <h2><i class="fa-solid fa-user"></i> ${escapeHtml(s.nombre)} (${escapeHtml(s.email)})</h2>
                     <span class="status-badge">${escapeHtml(s.estado || 'Recibido')}</span>
                 </div>
                 <p style="color: var(--text-main); margin-bottom: 5px;"><strong>Dispositivo/Servicio:</strong> ${escapeHtml(etiquetaServicio(s.servicio))}</p>
@@ -93,14 +107,22 @@ async function cargarTodasLasSolicitudes() {
                 <p class="service-meta"><i class="fa-solid fa-phone"></i> Teléfono: ${escapeHtml(s.telefono)} | Fecha: ${new Date(s.fecha).toLocaleString()}</p>
 
                 <div style="margin-top: 15px; display: flex; gap: 10px; align-items: center; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; flex-wrap: wrap;">
-                    <label style="font-size: 0.9rem; color: var(--text-muted);">Cambiar Estado:</label>
+                    <label for="select-estado-${escapeHtml(s._id)}" style="font-size: 0.9rem; color: var(--text-muted);">Cambiar Estado:</label>
                     <select id="select-estado-${escapeHtml(s._id)}" style="padding: 6px; background: var(--bg-dark); color: white; border: 1px solid var(--text-muted); border-radius: 5px;">
                         <option value="Recibido" ${s.estado === 'Recibido' ? 'selected' : ''}>1. Recibido</option>
                         <option value="Diagnóstico" ${s.estado === 'Diagnóstico' ? 'selected' : ''}>2. Diagnóstico</option>
                         <option value="En Proceso" ${s.estado === 'En Proceso' ? 'selected' : ''}>3. En Proceso</option>
                         <option value="Entregado" ${s.estado === 'Entregado' ? 'selected' : ''}>4. Entregado</option>
                     </select>
-                    <button type="button" class="btn-primary btn-actualizar" data-id="${escapeHtml(s._id)}" style="padding: 6px 14px; font-size: 0.85rem;">Actualizar Estado</button>
+                    <button type="button" class="btn-primary btn-actualizar" data-id="${escapeHtml(s._id)}"
+                        aria-label="Actualizar estado de la solicitud de ${escapeHtml(s.nombre || 'este cliente')}"
+                        style="padding: 6px 14px; font-size: 0.85rem;">Actualizar Estado</button>
+                    <button type="button" class="btn-danger btn-eliminar" data-id="${escapeHtml(s._id)}"
+                        data-nombre="${escapeHtml(s.nombre || 'este cliente')}"
+                        aria-label="Eliminar la solicitud de ${escapeHtml(s.nombre || 'este cliente')}"
+                        style="margin-left: auto;">
+                        <i class="fa-solid fa-trash" aria-hidden="true"></i> Eliminar
+                    </button>
                 </div>
             </div>
         `).join('');
@@ -109,8 +131,13 @@ async function cargarTodasLasSolicitudes() {
             btn.addEventListener('click', () => actualizarEstado(btn.dataset.id));
         });
 
+        contenedor.querySelectorAll('.btn-eliminar').forEach((btn) => {
+            btn.addEventListener('click', () => eliminarSolicitud(btn.dataset.id, btn.dataset.nombre));
+        });
+
     } catch (error) {
         console.error('Error al cargar solicitudes en admin:', error);
+        mostrarEstadoAdmin('No se pudieron cargar las solicitudes. Revisa la conexión y recarga la página.', 'error');
         contenedor.innerHTML = `<p style="color: var(--text-muted); text-align:center; padding: 30px;">No se pudieron cargar las solicitudes. Revisa la conexión y recarga la página.</p>`;
     }
 }
@@ -136,14 +163,47 @@ async function actualizarEstado(id) {
         }
 
         if (res.ok) {
-            alert('¡Estado actualizado con éxito!');
+            mostrarEstadoAdmin('Estado actualizado correctamente.');
             await cargarTodasLasSolicitudes();
         } else {
             const data = await res.json().catch(() => ({}));
-            alert(data.error || 'Error al actualizar el estado.');
+            mostrarEstadoAdmin(data.error || 'Error al actualizar el estado.', 'error');
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Error de conexión con el servidor.');
+        mostrarEstadoAdmin('Error de conexión con el servidor.', 'error');
+    }
+}
+
+async function eliminarSolicitud(id, nombre) {
+    const confirmado = window.confirm(
+        `¿Eliminar definitivamente la solicitud de ${nombre || 'este cliente'}? Esta acción no se puede deshacer.`
+    );
+    if (!confirmado) return;
+
+    try {
+        const res = await fetch(`${API_URL}/api/admin/servicios/${encodeURIComponent(id)}`, {
+            method: 'DELETE',
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('adminToken')}`
+            }
+        });
+
+        if (res.status === 401 || res.status === 403) {
+            cerrarSesionAdmin();
+            return;
+        }
+
+        const data = await res.json().catch(() => ({}));
+
+        if (res.ok) {
+            mostrarEstadoAdmin(data.mensaje || 'Solicitud eliminada correctamente.');
+            await cargarTodasLasSolicitudes();
+        } else {
+            mostrarEstadoAdmin(data.error || 'No se pudo eliminar la solicitud.', 'error');
+        }
+    } catch (error) {
+        console.error('Error al eliminar solicitud:', error);
+        mostrarEstadoAdmin('Error de conexión con el servidor.', 'error');
     }
 }

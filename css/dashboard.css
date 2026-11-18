@@ -11,6 +11,7 @@
     margin: 0 auto;
 }
 
+.dashboard-container h1,
 .dashboard-container h2 {
     font-size: 2rem;
     margin-bottom: 5px;

@@ -12,6 +12,7 @@
 </head>
 
 <body>
+    <a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
     <header class="header">
         <div class="logo">
             <a href="index.html"><img src="./assets/img/logo-navbar.png" alt="Logo TecniPro" class="logo-img"></a>
@@ -22,9 +23,10 @@
         </div>
     </header>
 
-    <main class="dashboard-main">
+    <main class="dashboard-main" id="contenido-principal">
         <section class="dashboard-container">
-            <h2>Panel de Control - Administrador</h2>
+            <h1>Panel de Control - Administrador</h1>
+            <p id="admin-status" class="form-status" role="status" aria-live="polite" hidden></p>
             <div id="admin-lista-servicios">
             </div>
         </section>

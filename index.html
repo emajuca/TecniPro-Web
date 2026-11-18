@@ -13,11 +13,12 @@
 </head>
 
 <body>
+    <a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
     <header class="header">
         <div class="logo">
             <a href="#inicio"><img src="./assets/img/logo-navbar.png" alt="Logo TecniPro" class="logo-img"></a>
         </div>
-        <nav class="nav-menu">
+        <nav class="nav-menu" aria-label="Navegación principal">
             <a href="#servicios">Servicios</a>
             <a href="#beneficios">¿Por qué nosotros?</a>
             <a href="#preguntas">Preguntas Frecuentes</a>
@@ -26,7 +27,7 @@
         <button id="openLoginBtn" class="btn-primary">Iniciar Sesión</button>
     </header>
 
-    <main>
+    <main id="contenido-principal">
         <section id="inicio" class="hero">
             <div class="hero-text">
                 <h1>Soluciones Técnicas a Domicilio para PC, Celulares y Consolas</h1>
@@ -81,18 +82,18 @@
             <h2>¿Por qué elegir TecniPro?</h2>
             <div class="benefits-grid">
                 <div class="benefit-item">
-                    <i class="fa-solid fa-house-laptop benefit-icon"></i>
-                    <h4>Comodidad Total</h4>
+                    <i class="fa-solid fa-house-laptop benefit-icon" aria-hidden="true"></i>
+                    <h3>Comodidad Total</h3>
                     <p>Atendemos directamente en la comodidad de tu hogar o lugar de trabajo.</p>
                 </div>
                 <div class="benefit-item">
-                    <i class="fa-solid fa-clock benefit-icon"></i>
-                    <h4>Respuesta Rápida</h4>
+                    <i class="fa-solid fa-clock benefit-icon" aria-hidden="true"></i>
+                    <h3>Respuesta Rápida</h3>
                     <p>Diagnósticos y reparación en tiempo récord para que no detengas tus labores.</p>
                 </div>
                 <div class="benefit-item">
-                    <i class="fa-solid fa-shield-halved benefit-icon"></i>
-                    <h4>Garantía y Confianza</h4>
+                    <i class="fa-solid fa-shield-halved benefit-icon" aria-hidden="true"></i>
+                    <h3>Garantía y Confianza</h3>
                     <p>Repuestos probados, garantía por servicio y trato directo personalizado.</p>
                 </div>
             </div>
@@ -101,18 +102,29 @@
         <section id="preguntas" class="faq">
             <h2>Preguntas Frecuentes</h2>
             <div class="faq-item">
-                <h4>¿Qué marcas de dispositivos reparan?</h4>
-                <p>Reparamos una amplia gama de marcas, incluyendo Apple, Samsung, Xiaomi, HP, Dell, PlayStation y Xbox.
+                <h3>¿Qué marcas de dispositivos reparan?</h3>
+                <p>Reparamos una amplia gama de marcas, incluyendo Apple, Samsung, Xiaomi, HP, Dell, PlayStation, Xbox y muchas mas.
                 </p>
             </div>
             <div class="faq-item">
-                <h4>¿Cuánto tiempo tarda un diagnóstico?</h4>
-                <p>El diagnóstico inicial se realiza en menos de 24 horas. La reparación depende del tipo de servicio
-                    requerido.</p>
+                <h3>¿Cuánto tiempo tarda un diagnóstico?</h3>
+                <p>El diagnóstico se realiza al instante durante la visita en tu hogar u oficina (toma entre 15 y 30 minutos). La mayoría de las reparaciones se completan en esa misma cita.</p>
             </div>
             <div class="faq-item">
-                <h4>¿Ofrecen garantía por sus servicios?</h4>
+                <h3>¿Ofrecen garantía por sus servicios?</h3>
                 <p>Sí, todos nuestros servicios incluyen garantía por defectos de reparación y repuestos utilizados.</p>
+            </div>
+            <div class="faq-item">
+                <h3>¿Cuánto tiempo toma la reparación?</h3>
+                <p>El tiempo de reparación varía según el tipo de servicio y la complejidad del problema. Te informaremos sobre el plazo estimado una vez que lo diagnosticemos.</p>
+            </div>
+            <div class="faq-item">
+                <h3>¿Qué sucede si no estoy disponible cuando llega el técnico?</h3>
+                <p>Te informaremos con anticipación sobre la llegada del técnico y podremos coordinar una nueva cita si es necesario.</p>
+            </div>
+            <div class="faq-item">
+                <h3>¿Cuánto cuesta?</h3>
+                <p>El costo de la reparación varía según el tipo de servicio y la complejidad del problema. Te informaremos sobre el costo estimado una vez que recibamos tu dispositivo.</p>
             </div>
         </section>
 
@@ -125,24 +137,52 @@
                     <h3>Formulario de Contacto</h3>
                     <form id="contactForm">
                         <div class="form-row">
-                            <input type="text" name="nombre" placeholder="Nombre completo" required>
-                            <input type="email" name="email" placeholder="Correo electrónico" required>
+                            <div class="form-field">
+                                <label class="sr-only" for="contacto-nombre">Nombre completo</label>
+                                <input type="text" id="contacto-nombre" name="nombre" placeholder="Nombre completo"
+                                    autocomplete="name" minlength="2" maxlength="100"
+                                    aria-describedby="error-nombre" required>
+                                <span class="field-error" id="error-nombre"></span>
+                            </div>
+                            <div class="form-field">
+                                <label class="sr-only" for="contacto-email">Correo electrónico</label>
+                                <input type="email" id="contacto-email" name="email" placeholder="Correo electrónico"
+                                    autocomplete="email" maxlength="254" aria-describedby="error-email" required>
+                                <span class="field-error" id="error-email"></span>
+                            </div>
                         </div>
                         <div class="form-row">
-                            <input type="tel" name="telefono" placeholder="Teléfono / WhatsApp" required>
-                            <select name="servicio" class="form-select" required>
-                                <option value="" disabled selected>Tipo de Dispositivo</option>
-                                <option value="computadores">Computadores / Laptops</option>
-                                <option value="celulares">Celulares / Tablets</option>
-                                <option value="consolas">Consolas / PC Gamer</option>
-                            </select>
+                            <div class="form-field">
+                                <label class="sr-only" for="contacto-telefono">Teléfono o WhatsApp</label>
+                                <input type="tel" id="contacto-telefono" name="telefono"
+                                    placeholder="Teléfono / WhatsApp" autocomplete="tel" inputmode="tel"
+                                    pattern="[0-9+\(\) .\-]{7,30}" maxlength="30"
+                                    aria-describedby="error-telefono" required>
+                                <span class="field-error" id="error-telefono"></span>
+                            </div>
+                            <div class="form-field">
+                                <label class="sr-only" for="contacto-servicio">Tipo de dispositivo</label>
+                                <select name="servicio" id="contacto-servicio" class="form-select"
+                                    aria-describedby="error-servicio" required>
+                                    <option value="" disabled selected>Tipo de Dispositivo</option>
+                                    <option value="computadores">Computadores / Laptops</option>
+                                    <option value="celulares">Celulares / Tablets</option>
+                                    <option value="consolas">Consolas / PC Gamer</option>
+                                </select>
+                                <span class="field-error" id="error-servicio"></span>
+                            </div>
                         </div>
-                        <textarea name="mensaje" placeholder="Describe brevemente el problema o requerimiento..."
-                            required></textarea>
+                        <div class="form-field">
+                            <label class="sr-only" for="contacto-mensaje">Descripción del problema</label>
+                            <textarea id="contacto-mensaje" name="mensaje"
+                                placeholder="Describe brevemente el problema o requerimiento..."
+                                minlength="5" maxlength="2000" aria-describedby="error-mensaje" required></textarea>
+                            <span class="field-error" id="error-mensaje"></span>
+                        </div>
 
                         <div class="data-checkbox-container">
-                            <label class="checkbox-label">
-                                <input type="checkbox" id="acepto-datos" required>
+                            <label class="checkbox-label" for="acepto-datos">
+                                <input type="checkbox" id="acepto-datos" name="acepto-datos" required>
                                 <span class="checkbox-text">
                                     Autorizo el <a href="./legal html/tratamiento-datos.html" target="_blank"
                                         rel="noopener noreferrer">tratamiento de datos personales</a> según la
@@ -151,12 +191,14 @@
                             </label>
                         </div>
 
+                        <div id="form-status" class="form-status" role="alert" aria-live="assertive" hidden></div>
+
                         <button type="submit" class="btn-primary">Enviar Solicitud</button>
                     </form>
                 </div>
 
-                <div class="divider-horizontal">
-                    <h1>O</h1>
+                <div class="divider-horizontal" aria-hidden="true">
+                    <span>O</span>
                 </div>
 
                 <div class="card-box">
@@ -187,7 +229,7 @@
             </div>
 
             <div class="footer-col">
-                <h4>Legales & Privacidad</h4>
+                <h3>Legales & Privacidad</h3>
                 <ul>
                     <li><a href="./legal html/politica-privacidad.html" id="open-privacy">Política de Privacidad</a></li>
                     <li><a href="./legal html/terminos-condiciones.html" id="open-terms">Términos y Condiciones</a></li>
@@ -197,10 +239,11 @@
             </div>
 
             <div class="footer-col">
-                <h4>Atención al Cliente</h4>
+                <h3>Atención al Cliente</h3>
                 <p class="contact-info-item"><i class="fa-solid fa-envelope"></i> rinconemanuel71@gmail.com</p>
                 <p class="contact-info-item"><i class="fa-solid fa-phone"></i> +57 313 8178896</p>
                 <p class="contact-info-item"><i class="fa-solid fa-location-dot"></i> Bogotá, Colombia</p>
+                <p class="contact-info-item"><i class="fa-solid fa-clock"></i>Lunes a Viernes: 8:00 AM - 6:00 PM. | Sábados 8:00 AM - 12:00 PM. | Domingos y Festivos: Previa cita.</p>
                 <div class="social-links">
                     <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i
                             class="fa-brands fa-instagram"></i></a>
@@ -222,37 +265,55 @@
         <i class="fa-brands fa-whatsapp"></i>
     </a>
 
-    <div id="loginModal" class="modal modal-overlay">
+    <div id="loginModal" class="modal modal-overlay" role="dialog" aria-modal="true"
+        aria-labelledby="loginModalTitle" aria-hidden="true">
         <div class="modal-content card-box">
-            <button type="button" id="closeLoginModal" class="close-modal-btn">&times;</button>
+            <button type="button" id="closeLoginModal" class="close-modal-btn"
+                aria-label="Cerrar inicio de sesión">&times;</button>
+            <h2 id="loginModalTitle" class="sr-only">Iniciar sesión o registrarse</h2>
 
-            <div class="auth-tabs">
-                <button type="button" class="tab-btn active" id="tabLoginBtn">Iniciar Sesión</button>
-                <button type="button" class="tab-btn" id="tabRegisterBtn">Registrarse</button>
+            <div class="auth-tabs" role="tablist" aria-label="Iniciar sesión o registrarse">
+                <button type="button" class="tab-btn active" id="tabLoginBtn" role="tab"
+                    aria-selected="true" aria-controls="modalLoginForm">Iniciar Sesión</button>
+                <button type="button" class="tab-btn" id="tabRegisterBtn" role="tab"
+                    aria-selected="false" aria-controls="modalRegisterForm">Registrarse</button>
             </div>
 
-            <form id="modalLoginForm" class="auth-form active">
+            <form id="modalLoginForm" class="auth-form active" role="tabpanel"
+                aria-labelledby="tabLoginBtn">
                 <h3 style="text-align: center; margin-bottom: 20px;">Accede a tu cuenta</h3>
-                    <input type="email" id="login-email" placeholder="Correo electrónico" required />
-                    <input type="password" id="login-password" placeholder="Contraseña" required />
+                <label class="sr-only" for="login-email">Correo electrónico</label>
+                <input type="email" id="login-email" name="email" placeholder="Correo electrónico"
+                    autocomplete="email" maxlength="254" required />
+                <label class="sr-only" for="login-password">Contraseña</label>
+                <input type="password" id="login-password" name="password" placeholder="Contraseña"
+                    autocomplete="current-password" maxlength="128" required />
                 <button type="submit" class="btn-primary" style="width: 100%; margin-top: 10px;">Ingresar</button>
             </form>
 
-            <form id="modalRegisterForm" class="auth-form" style="display: none;">
+            <form id="modalRegisterForm" class="auth-form" style="display: none;" role="tabpanel"
+                aria-labelledby="tabRegisterBtn">
                 <h3 style="text-align: center; margin-bottom: 20px;">Crear una cuenta</h3>
-                    <input type="text" id="reg-nombre" placeholder="Nombre completo" required />
-                    <input type="email" id="reg-email" placeholder="Correo electrónico" required />
-                    <input type="password" id="reg-password" placeholder="Contraseña (mín. 6 caracteres)" required />
+                <label class="sr-only" for="reg-nombre">Nombre completo</label>
+                <input type="text" id="reg-nombre" name="nombre" placeholder="Nombre completo"
+                    autocomplete="name" minlength="2" maxlength="100" required />
+                <label class="sr-only" for="reg-email">Correo electrónico</label>
+                <input type="email" id="reg-email" name="email" placeholder="Correo electrónico"
+                    autocomplete="email" maxlength="254" required />
+                <label class="sr-only" for="reg-password">Contraseña</label>
+                <input type="password" id="reg-password" name="password"
+                    placeholder="Contraseña (mín. 6 caracteres)" autocomplete="new-password"
+                    minlength="6" maxlength="128" required />
                 <button type="submit" class="btn-primary" style="width: 100%; margin-top: 10px;">Registrarse</button>
             </form>
         </div>
     </div>
 
     <!-- Asistente virtual TecniBot -->
-    <button id="chatbotToggle" class="chatbot-toggle" type="button" aria-label="Abrir asistente virtual"
+    <button id="chatbotToggle" class="chatbot-toggle" type="button" aria-label="Abrir asistente virtual (IA)"
         aria-expanded="false" aria-controls="chatbotPanel">
-        <i class="fa-solid fa-robot"></i>
-        <span class="chatbot-badge">IA</span>
+        <i class="fa-solid fa-robot" aria-hidden="true"></i>
+        <span class="chatbot-badge" aria-hidden="true">IA</span>
     </button>
 
     <section id="chatbotPanel" class="chatbot-panel" aria-hidden="true" aria-label="Asistente virtual TecniBot">
@@ -275,7 +336,8 @@
         </form>
     </section>
 
-    <div id="toast-container" class="toast-container"></div>
+    <div id="toast-container" class="toast-container" role="status" aria-live="polite"
+        aria-atomic="false"></div>
 
     <script src="./js/config.js"></script>
     <script src="./scripts.js"></script>

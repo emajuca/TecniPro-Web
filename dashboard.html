@@ -12,6 +12,7 @@
 </head>
 
 <body>
+    <a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
     <header class="header">
         <div class="logo">
             <a href="index.html"><img src="./assets/img/logo-navbar.png" alt="Logo TecniPro" class="logo-img"></a>
@@ -22,10 +23,11 @@
         </div>
     </header>
 
-    <main class="dashboard-main">
+    <main class="dashboard-main" id="contenido-principal">
         <section class="dashboard-container">
-            <h2>Panel de Control de Servicios</h2>
+            <h1>Panel de Control de Servicios</h1>
             <p class="dashboard-subtitle">Aquí puedes monitorear el estado actual de tus dispositivos en reparación a domicilio.</p>
+            <p id="dashboard-status" class="form-status" role="status" aria-live="polite" hidden></p>
 
             <div class="dashboard-actions">
                 <a href="index.html#contacto" class="btn-primary"><i class="fa-solid fa-plus"></i> Solicitar Nuevo Servicio a Domicilio</a>
@@ -49,7 +51,7 @@
             </div>
 
             <div class="footer-col">
-                <h4>Legales & Privacidad</h4>
+                <h3>Legales & Privacidad</h3>
                 <ul>
                     <li><a href="./legal html/politica-privacidad.html" id="open-privacy">Política de Privacidad</a></li>
                     <li><a href="./legal html/terminos-condiciones.html" id="open-terms">Términos y Condiciones</a></li>
@@ -59,7 +61,7 @@
             </div>
 
             <div class="footer-col">
-                <h4>Atención al Cliente</h4>
+                <h3>Atención al Cliente</h3>
                 <p class="contact-info-item"><i class="fa-solid fa-envelope"></i> rinconemanuel71@gmail.com</p>
                 <p class="contact-info-item"><i class="fa-solid fa-phone"></i> +57 313 8178896</p>
                 <p class="contact-info-item"><i class="fa-solid fa-location-dot"></i> Bogotá, Colombia</p>
