@@ -96,6 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!loginModal) return;
 
         lastFocused = document.activeElement;
+        loginModal.removeAttribute('inert');
         loginModal.classList.add('active');
         loginModal.setAttribute('aria-hidden', 'false');
         document.body.classList.add('modal-open');
@@ -107,6 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         loginModal.classList.remove('active');
         loginModal.setAttribute('aria-hidden', 'true');
+        loginModal.setAttribute('inert', '');
         document.body.classList.remove('modal-open');
 
         if (lastFocused && typeof lastFocused.focus === 'function') {
@@ -193,6 +195,7 @@ if (modalLoginForm) {
                 if (loginModal) {
                     loginModal.classList.remove('active');
                     loginModal.setAttribute('aria-hidden', 'true');
+                    loginModal.setAttribute('inert', '');
                 }
                 document.body.classList.remove('modal-open');
 
